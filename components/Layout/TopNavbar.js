@@ -12,12 +12,14 @@ const TopNavbar = () => {
     <>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand>FaceBook</Navbar.Brand>
+          <Navbar.Brand>
+            <i className="fa fa-facebook-square"></i> FaceBook
+          </Navbar.Brand>
           <Nav fill>
             <Nav.Item>
               <Link href="/login">
-                <a className={isActive("/login") ? "text-dark" : "text-white"}>
-                  Login
+                <a className={isActive("/login") ? "text-white" : "text-dark"}>
+                  <strong>Login</strong>
                 </a>
               </Link>
             </Nav.Item>
@@ -27,8 +29,8 @@ const TopNavbar = () => {
 
             <Nav.Item>
               <Link href="/signup">
-                <a className={isActive("/signup") ? "text-dark" : "text-white"}>
-                  Sign-Up
+                <a className={isActive("/signup") ? "text-white" : "text-dark"}>
+                  <strong>Sign-Up</strong>
                 </a>
               </Link>
             </Nav.Item>
