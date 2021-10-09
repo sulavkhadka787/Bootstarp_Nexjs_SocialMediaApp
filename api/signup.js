@@ -14,7 +14,7 @@ const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
 router.get("/:username", async (req, res) => {
   const { username } = req.params;
-
+  console.log("username==>>", username);
   try {
     if (username.length < 1) return res.status(401).send("Invalid");
 
@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
     await user.save();
 
     let profileFields = {};
-    proileFields.user = user._id;
+    profileFields.user = user._id;
     profileFields.bio = bio;
     profileFields.social = {};
 

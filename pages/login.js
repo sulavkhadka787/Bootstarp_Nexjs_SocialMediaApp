@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import { loginUser } from "../utils/authUser";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -21,8 +22,9 @@ const Login = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await loginUser(user, setErrorMsg, setFormLoading);
   };
 
   useEffect(() => {
@@ -38,7 +40,10 @@ const Login = () => {
         <Col>
           <div className="alert alert-success mb-3 mt-3">
             {errorMsg ? (
-              <strong>{errorMsg}</strong>
+              <strong style={{ color: "red" }}>
+                Error! <br />
+                {errorMsg}
+              </strong>
             ) : (
               <>
                 <i className="fa fa-empire" style={{ fontSize: "36px" }}></i>

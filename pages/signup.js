@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
+
+import axios from "axios";
+import baseUrl from "../utils/baseUrl";
+
+import { registerUser } from "../utils/authUser";
+import uploadPic from "../utils/uploadPicToCloudinary";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
-import Container from "react-bootstrap/Container";
 
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+
+let cancel;
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -25,9 +32,12 @@ const Signup = () => {
 
   const [showSocialLinks, setShowSocialLinks] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [usernameAvailable, setUsernameAvailable] = useState(false);
+
   const [submitDisabled, setSubmitDisabled] = useState(true);
+
+  const [username, setUsername] = useState("");
+  const [usernameLoading, setUsernameLoading] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
 
   const [media, setMedia] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
@@ -46,25 +56,71 @@ const Signup = () => {
 
     setUser((prev) => ({ ...prev, [name]: value }));
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormLoading(true);
+    let profilePicUrl;
+
+    if (media !== null) {
+      profilePicUrl = await uploadPic(media);
+    }
+
+    if (media !== null && !profilePicUrl) {
+      setFormLoading(false);
+      return setErrorMsg("Error Uploading Image");
+    }
+
+    await registerUser(user, profilePicUrl, setErrorMsg, setFormLoading);
   };
 
   useEffect(() => {
     const isUser = Object.values({ name, email, password, bio }).every((item) =>
       Boolean(item)
     );
-
+    console.log("isUser", isUser);
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
   }, [user]);
+
+  const checkUsername = async () => {
+    setUsernameLoading(true);
+    try {
+      cancel && cancel();
+      const CancelToken = axios.CancelToken;
+
+      const res = await axios.get(`${baseUrl}/api/signup/${username}`, {
+        cancelToken: new CancelToken((canceler) => {
+          cancel = canceler;
+        }),
+      });
+      if (errorMsg !== null) setErrorMsg(null);
+
+      if (res.data === "Avaialable") {
+        setUsernameAvailable(true);
+        setUser((prev) => ({ ...prev, username }));
+        console.log("user=>>>", user);
+      }
+    } catch (error) {
+      setErrorMsg("Username Not Available");
+      setUsernameAvailable(false);
+    }
+    setUsernameLoading(false);
+  };
+
+  useEffect(() => {
+    username === "" ? setUsernameAvailable(false) : checkUsername();
+  }, [username]);
+
   return (
     <>
-      {JSON.stringify(user)}
+      {JSON.stringify(submitDisabled)}
       <Row md={2} className="justify-content-md-center">
         <Col>
           <div className="alert alert-success mb-3 mt-3">
             {errorMsg ? (
-              <strong>{errorMsg}</strong>
+              <strong style={{ color: "red" }}>
+                Error!! <br />
+                {errorMsg}
+              </strong>
             ) : (
               <>
                 <i className="fa fa-empire" style={{ fontSize: "36px" }}></i>
@@ -171,9 +227,9 @@ const Signup = () => {
                 <Form.Control
                   type="text"
                   placeholder="Username"
-                  value={userName}
+                  value={username}
                   onChange={(e) => {
-                    setUserName(e.target.value);
+                    setUsername(e.target.value);
                     if (regexUserName.test(e.target.value)) {
                       setUsernameAvailable(true);
                     } else {
@@ -184,8 +240,15 @@ const Signup = () => {
               </InputGroup>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Example textarea</Form.Label>
-              <Form.Control as="textarea" rows={3} placeholder="bio" />
+              <Form.Label>Bio</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="bio"
+                name="bio"
+                value={bio}
+                onChange={handleChange}
+              />
             </Form.Group>
 
             <Button
