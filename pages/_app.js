@@ -1,49 +1,46 @@
-import App from "next/app";
 import axios from "axios";
+import { redirectUser } from "../utils/authUser";
 import { parseCookies, destroyCookie } from "nookies";
 import baseUrl from "../utils/baseUrl";
 import Layout from "../components/Layout/Layout";
 import "bootstrap/dist/css/bootstrap.css";
 
-class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    const { token } = parseCookies(ctx);
-    let pageProps = {};
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <Layout {...pageProps}>
+      <Component {...pageProps} />
+    </Layout>
+  );
+};
 
-    const protectedRoutes = ctx.pathname === "/";
+MyApp.getInitialProps = async ({ Component, ctx }) => {
+  const { token } = parseCookies(ctx);
+  let pageProps = {};
 
-    if (!token) {
-      protectedRoutes && redirectUser(ctx, "/login");
-    } else {
-      if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx);
-      }
-      try {
-        const res = await axios.get(`${baseUrl}/api/auth`, {
-          headers: { Authorization: token },
-        });
+  const protectedRoutes = ctx.pathname === "/";
 
-        const { user, userFollowStats } = res.data;
-        if (user) !protectedRoutes && redirectUser(ctx, "/");
-        pageProps.user = user;
-        pageProps.userFollowStats = userFollowStats;
-      } catch (error) {
-        destroyCookie(ctx, "token");
-        redirectUser(ctx, "/login");
-      }
+  if (!token) {
+    protectedRoutes && redirectUser(ctx, "/login");
+  } else {
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
     }
+    try {
+      const res = await axios.get(`${baseUrl}/api/auth`, {
+        headers: { Authorization: token },
+      });
 
-    return { pageProps };
+      const { user, userFollowStats } = res.data;
+      if (user) !protectedRoutes && redirectUser(ctx, "/");
+      pageProps.user = user;
+      pageProps.userFollowStats = userFollowStats;
+    } catch (error) {
+      destroyCookie(ctx, "token");
+      redirectUser(ctx, "/login");
+    }
   }
-  render() {
-    const { Component, pageProps } = this.props;
 
-    return (
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    );
-  }
-}
+  return { pageProps };
+};
 
 export default MyApp;

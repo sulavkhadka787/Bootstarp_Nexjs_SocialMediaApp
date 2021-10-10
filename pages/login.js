@@ -87,7 +87,7 @@ const Login = () => {
               Sign-In
             </Button>
           </Form>
-          <div class="alert alert-success mb-3 mt-3">
+          <div className="alert alert-success mb-3 mt-3">
             <strong>New User ? </strong> <br />
             <a href="/login">Sign-up here</a>
           </div>

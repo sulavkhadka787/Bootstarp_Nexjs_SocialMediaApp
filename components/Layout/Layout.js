@@ -2,7 +2,7 @@ import React from "react";
 import HeadTags from "./HeadTags";
 import TopNavbar from "./TopNavbar";
 import Container from "react-bootstrap/Container";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import nProgress from "nprogress";
 
 function Layout({ children }) {
@@ -10,11 +10,16 @@ function Layout({ children }) {
   Router.onRouteChangeComplete = () => nProgress.done();
   Router.onRouteChangeError = () => nProgress.done();
 
+  const router = useRouter();
+  console.log(router.pathname);
+
   return (
     <>
       <HeadTags />
-      <TopNavbar />
-      <Container>{children}</Container>
+      {router.pathname != "/login" ||
+        (router.pathname != "/signin" && <TopNavbar />)}
+
+      <div>{children}</div>
     </>
   );
 }
