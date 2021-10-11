@@ -1,10 +1,5 @@
 a:link {
   text-decoration: none;
-  color: #fff;
-}
-
-a:hover {
-  color: red;
 }
 
 .file-upload {
@@ -17,4 +12,32 @@ a:hover {
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+
+.nav-links:hover {
+  background-color: #dcdcdc;
+}
+
+.post-area {
+  border-style: ridge;
+}
+
+.searchbar {
+  width: 200px;
+}
+
+.dropdown-content {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.show a {
+  display: block;
+  background-color: beige;
+  text-align: center;
+  margin: 5px 0 5px;
+  padding: 5px 0 5px;
 }

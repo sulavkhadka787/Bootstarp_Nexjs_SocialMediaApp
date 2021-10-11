@@ -1,29 +1,40 @@
-import { Row, Col, Nav } from "react-bootstrap";
+import Sidemenu from "../components/Layout/Sidemenu";
+import SearchBar from "../components/Layout/SearchBar";
+import { Container, Row, Col, Form, Image } from "react-bootstrap";
 
 const Index = ({ user, userFollowStats }) => {
   console.log({ user, userFollowStats });
   return (
-    <Row md={12}>
-      <Col className="col-md-3" style={{ backgroundColor: "red" }}>
-        <Nav className="flex-column">
-          <Nav.Link href="/">
-            <i class="fa fa-home"></i>Home
-          </Nav.Link>
-          <Nav.Link href="/messages">
-            <i class="fa fa-envelope"></i>Messages
-          </Nav.Link>
-          <Nav.Link href="/notifications">
-            <i class="fa fa-bell"></i>Notifications
-          </Nav.Link>
-          <Nav.Link href="/account">Account</Nav.Link>
-          <Nav.Link href="/logout">Logout</Nav.Link>
-        </Nav>
-      </Col>
-      <Col style={{ backgroundColor: "green" }}>body</Col>
-      <Col className="col-md-2" style={{ backgroundColor: "blue" }}>
-        search
-      </Col>
-    </Row>
+    <Container fluid>
+      <Row md={12}>
+        <Col className="col-md-2">
+          <Sidemenu />
+        </Col>
+        <Col className="mt-3 post-area">
+          <Form className="mt-3">
+            <Form.Group>
+              <Row className="d-flex">
+                <Col className="col-md-1">
+                  <Image
+                    style={{ height: "40px", width: "40px" }}
+                    roundedCircle
+                    src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+                  />
+                </Col>
+
+                <Col className="col-md-10 ">
+                  {" "}
+                  <Form.Control as="textarea" rows={3} />
+                </Col>
+              </Row>
+            </Form.Group>
+          </Form>
+        </Col>
+        <Col className="col-md-3 mt-3">
+          <SearchBar />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
