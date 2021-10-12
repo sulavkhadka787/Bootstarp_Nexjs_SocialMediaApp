@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { loginUser } from "../utils/authUser";
+import cookie from "js-cookie";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -33,6 +34,12 @@ const Login = () => {
     );
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
   }, [user]);
+
+  useEffect(() => {
+    document.title = "Welcome Back";
+    const userEmail = cookie.get("userEmail");
+    if (userEmail) setUser((prev) => ({ ...prev, email: userEmail }));
+  });
 
   return (
     <>

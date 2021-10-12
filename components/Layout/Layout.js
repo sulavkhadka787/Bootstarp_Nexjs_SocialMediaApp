@@ -1,11 +1,15 @@
 import React from "react";
-import HeadTags from "./HeadTags";
-import TopNavbar from "./TopNavbar";
-import Container from "react-bootstrap/Container";
 import Router, { useRouter } from "next/router";
 import nProgress from "nprogress";
 
-function Layout({ children }) {
+import Sidemenu from "./Sidemenu";
+import SearchBar from "./SearchBar";
+import CreatePost from "./CreatePost";
+import HeadTags from "./HeadTags";
+import TopNavbar from "./TopNavbar";
+import { Container, Row, Col } from "react-bootstrap";
+
+function Layout({ children, user }) {
   Router.onRouteChangeStart = () => nProgress.start();
   Router.onRouteChangeComplete = () => nProgress.done();
   Router.onRouteChangeError = () => nProgress.done();
@@ -16,10 +20,27 @@ function Layout({ children }) {
   return (
     <>
       <HeadTags />
-      {router.pathname != "/login" ||
-        (router.pathname != "/signin" && <TopNavbar />)}
+      {user ? (
+        <Container fluid>
+          <Row md={12}>
+            <Col className="col-md-2">
+              <Sidemenu user={user} />
+            </Col>
+            <Col className="mt-3 post-area">
+              <>{children}</>
+            </Col>
 
-      <div>{children}</div>
+            <Col className="col-md-3 mt-3">
+              <SearchBar />
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <>
+          <TopNavbar />
+          <div>{children}</div>
+        </>
+      )}
     </>
   );
 }
