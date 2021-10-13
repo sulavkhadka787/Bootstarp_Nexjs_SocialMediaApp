@@ -39,7 +39,7 @@ const Login = () => {
     document.title = "Welcome Back";
     const userEmail = cookie.get("userEmail");
     if (userEmail) setUser((prev) => ({ ...prev, email: userEmail }));
-  });
+  }, []);
 
   return (
     <>
@@ -95,8 +95,10 @@ const Login = () => {
             </Button>
           </Form>
           <div className="alert alert-success mb-3 mt-3">
-            <strong>New User ? </strong> <br />
-            <a href="/login">Sign-up here</a>
+            <strong>New User ? </strong>
+            <a className="none-a" href="/login">
+              Sign-up here
+            </a>
           </div>
         </Col>
       </Row>

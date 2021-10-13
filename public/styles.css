@@ -1,7 +1,21 @@
-a:link {
+a,
+a:link,
+a:visited {
   text-decoration: none;
+  color: black;
+  padding: 10px;
 }
 
+a:hover {
+  color: black;
+  padding: "10px";
+}
+
+.none-a {
+  background-color: teal !important ;
+  color: white !important;
+  border-radius: 5px;
+}
 .file-upload {
   height: 100px;
 }
@@ -14,8 +28,14 @@ a:link {
   display: block;
 }
 
-.nav-links:hover {
+.nav-links a:hover {
   background-color: #dcdcdc;
+  color: black !important;
+  padding: 10px;
+}
+.nav-links span:hover {
+  background-color: #dcdcdc;
+  padding: 10px;
 }
 
 .post-area {

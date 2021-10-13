@@ -17,21 +17,20 @@ const TopNavbar = () => {
           </Navbar.Brand>
           <Nav fill>
             <Nav.Item>
-              <Link href="/login">
-                <a className={isActive("/login") ? "text-white" : "text-dark"}>
-                  <strong>Login</strong>
-                </a>
+              <Link
+                href="/login"
+                className={isActive("/login") ? "font-white" : "font-dark"}
+              >
+                Login
               </Link>
             </Nav.Item>
+            <div>|</div>
             <Nav.Item>
-              <Nav.Link></Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item>
-              <Link href="/signup">
-                <a className={isActive("/signup") ? "text-white" : "text-dark"}>
-                  <strong>Sign-Up</strong>
-                </a>
+              <Link
+                href="/signup"
+                className={isActive("/signup") ? "font-white" : "font-dark"}
+              >
+                Sign-Up
               </Link>
             </Nav.Item>
           </Nav>

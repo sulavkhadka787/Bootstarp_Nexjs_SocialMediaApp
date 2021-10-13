@@ -23,7 +23,7 @@ function Layout({ children, user }) {
       {user ? (
         <Container fluid>
           <Row md={12}>
-            <Col className="col-md-2">
+            <Col className="col-md-2 mt-4">
               <Sidemenu user={user} />
             </Col>
             <Col className="mt-3 post-area">
