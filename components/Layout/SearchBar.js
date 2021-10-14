@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import cookie from "js-cookie";
 import Router from "next/router";
 import baseUrl from "../../utils/baseUrl";
+import Link from "next/link";
 import { Form, Button, Image, Col } from "react-bootstrap";
 
 let cancel;
@@ -13,8 +14,16 @@ const SearchBar = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
 
+  const inputRef = useRef();
+
   const handleChange = async (e) => {
     const { value } = e.target;
+    if (value.length === 0 || "") {
+      setResults([]);
+      return;
+    }
+
+    if (value.trim().length === 0) return;
     setText(value);
     setLoading(true);
     try {
@@ -30,8 +39,10 @@ const SearchBar = () => {
       });
       if (res.data.length === 0) return setLoading(false);
       console.log("res-data", res.data);
+      setShowDropdown(true);
       setResults(res.data);
     } catch (error) {
+      alert("error Searching");
       console.log(error);
     }
   };
@@ -39,39 +50,41 @@ const SearchBar = () => {
   return (
     <>
       <Col className="col-md-8">
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setShowDropdown(true);
-            console.log("submit");
-          }}
-          className="d-flex"
-        >
-          <Form.Control
-            required
-            value={text}
+        <Form>
+          <input
+            ref={inputRef}
+            autoComplete="off"
+            defaultValue={text}
             type="search"
             placeholder="Search"
             name="search"
             onChange={handleChange}
+            className="input-search"
           />
-          <Button variant="secondary" type="submit">
-            <i className="fa fa-search"></i>
-          </Button>
         </Form>
-        <div className={showDropdown ? "show" : "dropdown-content"}>
-          <a href="#about">
-            <Image
-              style={{ height: "20px", width: "20px" }}
-              roundedCircle
-              src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
-            />
-            {"  "}
-            About
-          </a>
-          <a href="#base">Base</a>
-          <a href="#blog">Blog</a>
-        </div>
+
+        {results &&
+          results.map((r) => (
+            <div
+              key={r._id}
+              className={showDropdown ? "show" : "dropdown-content"}
+              onClick={(e) => {
+                e.preventDefault();
+                Router.push(`/username`);
+                console.log(r.username);
+                setShowDropdown(false);
+                inputRef.current.value = "";
+              }}
+            >
+              <Image
+                style={{ height: "20px", width: "20px" }}
+                roundedCircle
+                src={r.profilePicUrl}
+              />
+
+              {r.username}
+            </div>
+          ))}
       </Col>
     </>
   );

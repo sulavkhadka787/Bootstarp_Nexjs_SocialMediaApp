@@ -8,10 +8,8 @@ router.get("/:searchText", authMiddleware, async (req, res) => {
 
   if (searchText.length === 0) return;
   try {
-    let userPattern = new RegExp(`^${searchText}`);
-
     const results = await UserModel.find({
-      name: { $regex: userPattern, $option: "i" },
+      name: { $regex: searchText, $options: "i" },
     });
 
     res.json(results);
@@ -20,3 +18,5 @@ router.get("/:searchText", authMiddleware, async (req, res) => {
     return res.status(500).send("Server error");
   }
 });
+
+module.exports = router;

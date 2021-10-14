@@ -58,7 +58,7 @@ const CreatePost = () => {
         </Form.Group>
         <div style={addStyles()} onClick={() => inputRef.current.click()}>
           {media === null ? (
-            <i class="fa fa-plus"></i>
+            <i className="fa fa-plus"></i>
           ) : (
             <img
               src={mediaPreview}

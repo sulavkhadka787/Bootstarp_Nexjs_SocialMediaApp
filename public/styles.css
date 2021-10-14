@@ -51,13 +51,15 @@ a:hover {
 }
 
 .show {
-  display: block;
-}
-
-.show a {
+  cursor: pointer;
   display: block;
   background-color: beige;
   text-align: center;
-  margin: 5px 0 5px;
+  margin: 15px 0 15px;
   padding: 5px 0 5px;
+}
+
+.input-search {
+  border-radius: 5px;
+  padding: 5px;
 }

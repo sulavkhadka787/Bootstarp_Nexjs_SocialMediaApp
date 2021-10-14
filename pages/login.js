@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { loginUser } from "../utils/authUser";
 import cookie from "js-cookie";
+import Link from "next/link";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -96,9 +97,9 @@ const Login = () => {
           </Form>
           <div className="alert alert-success mb-3 mt-3">
             <strong>New User ? </strong>
-            <a className="none-a" href="/login">
+            <Link className="none-a" href="/signup">
               Sign-up here
-            </a>
+            </Link>
           </div>
         </Col>
       </Row>
