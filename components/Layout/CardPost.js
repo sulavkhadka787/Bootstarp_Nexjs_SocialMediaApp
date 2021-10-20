@@ -2,8 +2,16 @@ import { useState } from "react";
 import { Container, Modal, Button, Row, Col, Image } from "react-bootstrap";
 import Example from "./Example";
 
-const CardPost = ({ post }) => {
+const CardPost = ({ user, post, setPosts }) => {
   const [modalShow, setModalShow] = React.useState(false);
+
+  const [likes, setLikes] = useState(post.likes);
+  const [comments, setComments] = useState(post.comments);
+  const [error, setError] = useState(null);
+
+  const isLiked =
+    likes.length > 0 &&
+    likes.filter((like) => like.user === user._id).length > 0;
 
   const onHide = () => {
     setModalShow(false);
@@ -11,8 +19,8 @@ const CardPost = ({ post }) => {
 
   return (
     <>
-      <Container>
-        <Row>
+      <Container className="mb-5">
+        <Row className="my-2">
           <img
             src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
             onClick={() => setModalShow(true)}
@@ -52,8 +60,16 @@ const CardPost = ({ post }) => {
             <i class="fa fa-comment-o"></i>
           </span>
         </Row>
-        <Row>
-          <input type="text" />
+        <Row className="d-flex flex-column">
+          <input
+            type="text"
+            className="mt-2"
+            style={{ padding: "5px 0", borderRadius: "5px", width: "95%" }}
+            placeholder="Add Comment"
+          />
+          <Button className="btn-primary mt-2" style={{ width: "200px" }}>
+            Post{" "}
+          </Button>
         </Row>
       </Container>
 
