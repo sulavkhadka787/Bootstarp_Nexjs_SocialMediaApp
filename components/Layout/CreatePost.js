@@ -2,11 +2,19 @@ import { useState, useRef } from "react";
 import { Form, Row, Col, Image } from "react-bootstrap";
 
 const CreatePost = () => {
+  const [newPost, setNewPost] = useState({ text: "", location: "" });
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef();
+
+  const [error, setError] = useState(null);
+  const [highlighted, setHighlighted] = useState(false);
 
   const [media, setMedia] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
-  const [highlighted, setHighlighted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+  };
 
   const addStyles = () => ({
     height: "150px",

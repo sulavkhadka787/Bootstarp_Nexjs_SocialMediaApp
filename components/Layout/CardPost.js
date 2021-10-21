@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { Container, Modal, Button, Row, Col, Image } from "react-bootstrap";
 import Example from "./Example";
+import PostComments from "../Posts/PostComments";
+import Link from "next/link";
+import calculateTime from "../../utils/calculateTime";
+import CommentInputField from "../Posts/CommentInputField";
 
 const CardPost = ({ user, post, setPosts }) => {
+  console.log("uuussserrrr===", user);
   const [modalShow, setModalShow] = React.useState(false);
 
   const [likes, setLikes] = useState(post.likes);
@@ -39,38 +44,60 @@ const CardPost = ({ user, post, setPosts }) => {
 
             <div className="px-3">
               {" "}
-              <b>Sulav Khadka</b>
+              <Link href={`/${post.user.username}`}>
+                <a>Sulav Khadka</a>
+              </Link>
               <br />
-              2021 Oct 17th
+              <span>{calculateTime(post.createdAt)}</span> |{" "}
+              {post.location && <span>{post.location}</span>}
             </div>
           </Col>
-
-          <Col className="col-md-2">
-            <Example />
-          </Col>
+          {(user.role === "root" || post.user._id === user._id) && (
+            <Col className="col-md-2">
+              <Example />
+            </Col>
+          )}
         </Row>
         <Row>
-          <Col>This is first post from Sulav</Col>
+          <Col>{post.text}</Col>
         </Row>
         <hr />
         <Row>
           <span>
-            <i class="fa fa-heart" style={{ color: "red" }}></i>{" "}
-            <span>2 Likes </span>
-            <i class="fa fa-comment-o"></i>
+            {isLiked ? (
+              <i className="fa fa-heart" style={{ color: "red" }}></i>
+            ) : (
+              <i class="fa fa-heart-o"></i>
+            )}
+
+            {likes.length > 0 && (
+              <span>
+                {" "}
+                {`${likes.length} ${
+                  likes.length === 1 ? "like" : "likes"
+                }`}{" "}
+              </span>
+            )}
+            {"   "}
+            <i className="fa fa-comment-o"></i>
           </span>
         </Row>
-        <Row className="d-flex flex-column">
-          <input
-            type="text"
-            className="mt-2"
-            style={{ padding: "5px 0", borderRadius: "5px", width: "95%" }}
-            placeholder="Add Comment"
-          />
-          <Button className="btn-primary mt-2" style={{ width: "200px" }}>
-            Post{" "}
-          </Button>
+        <Row>
+          {comments.map((comment, i) => (
+            <PostComments
+              key={comment._id}
+              post={post}
+              comment={comment}
+              user={user}
+              setComments={setComments}
+            />
+          ))}
         </Row>
+        <CommentInputField
+          user={user}
+          postId={post._id}
+          setComments={setComments}
+        />
       </Container>
 
       <Modal show={modalShow} onHide={onHide} size="lg" className="modal">
