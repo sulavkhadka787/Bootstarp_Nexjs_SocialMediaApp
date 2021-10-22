@@ -6,7 +6,6 @@ import { parseCookies } from "nookies";
 import axios from "axios";
 
 const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
-  console.log("postdata", postsData);
   const [posts, setPosts] = useState(postsData || []);
 
   if (posts.length === 0 || errorLoading) {
@@ -14,7 +13,7 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   }
   return (
     <>
-      <CreatePost />
+      <CreatePost user={user} setPosts={setPosts} />
       {posts.length === 0 ? (
         <div>No Posts</div>
       ) : (

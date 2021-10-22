@@ -7,7 +7,6 @@ import calculateTime from "../../utils/calculateTime";
 import CommentInputField from "../Posts/CommentInputField";
 
 const CardPost = ({ user, post, setPosts }) => {
-  console.log("uuussserrrr===", user);
   const [modalShow, setModalShow] = React.useState(false);
 
   const [likes, setLikes] = useState(post.likes);
@@ -24,13 +23,12 @@ const CardPost = ({ user, post, setPosts }) => {
 
   return (
     <>
-      <Container className="mb-5">
-        <Row className="my-2">
-          <img
-            src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            onClick={() => setModalShow(true)}
-          />
-        </Row>
+      <Container className="my-5" style={{ border: "1px solid" }}>
+        {post.picUrl && (
+          <Row className="my-2">
+            <img src={post.picUrl} onClick={() => setModalShow(true)} />
+          </Row>
+        )}
 
         <Row className="mt-3 mb-3 justify-content-between">
           <Col className="d-flex flex-grow-1 col-md-10">

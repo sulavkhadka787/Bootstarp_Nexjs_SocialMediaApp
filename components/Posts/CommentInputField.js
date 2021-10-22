@@ -17,7 +17,7 @@ const CommentInputField = ({ user, postId, setComments }) => {
           onChange={(e) => setText(e.target.value)}
         />
         <Button
-          className="btn-primary mt-2"
+          className="btn-primary my-2"
           style={{ width: "200px" }}
           disabled={text === "" || loading}
         >

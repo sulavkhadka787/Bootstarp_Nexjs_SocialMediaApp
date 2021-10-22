@@ -10,7 +10,7 @@ const uuid = require("uuid").v4;
 
 router.post("/", authMiddleware, async (req, res) => {
   const { text, location, picUrl } = req.body;
-
+  console.log("router-popst", text, location, picUrl);
   if (text.length < 1) {
     return res.status(401).send("Text must be atleast 1 characters");
   }
