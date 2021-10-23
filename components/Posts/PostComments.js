@@ -34,6 +34,7 @@ const PostComments = ({ post, comment, user, setComments }) => {
                   fontSize: "18px",
                   color: "red",
                   marginRight: "0px",
+                  cursor: "pointer",
                 }}
               ></i>
             </div>

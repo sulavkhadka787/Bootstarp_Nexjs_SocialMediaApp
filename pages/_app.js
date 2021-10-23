@@ -4,6 +4,7 @@ import { parseCookies, destroyCookie } from "nookies";
 import baseUrl from "../utils/baseUrl";
 import Layout from "../components/Layout/Layout";
 import "bootstrap/dist/css/bootstrap.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyApp = ({ Component, pageProps }) => {
   return (

@@ -6,7 +6,7 @@ import Link from "next/link";
 import calculateTime from "../../utils/calculateTime";
 import CommentInputField from "../Posts/CommentInputField";
 
-const CardPost = ({ user, post, setPosts }) => {
+const CardPost = ({ user, post, setPosts, setShowToastr }) => {
   const [modalShow, setModalShow] = React.useState(false);
 
   const [likes, setLikes] = useState(post.likes);
@@ -52,7 +52,11 @@ const CardPost = ({ user, post, setPosts }) => {
           </Col>
           {(user.role === "root" || post.user._id === user._id) && (
             <Col className="col-md-2">
-              <Example />
+              <Example
+                post={post}
+                setPosts={setPosts}
+                setShowToastr={setShowToastr}
+              />
             </Col>
           )}
         </Row>

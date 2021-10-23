@@ -48,7 +48,6 @@ const CreatePost = ({ user, setPosts }) => {
     }
 
     await submitNewPost(
-      user,
       newPost.text,
       newPost.location,
       picUrl,

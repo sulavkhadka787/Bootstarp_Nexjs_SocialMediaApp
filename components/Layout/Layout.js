@@ -15,7 +15,6 @@ function Layout({ children, user }) {
   Router.onRouteChangeError = () => nProgress.done();
 
   const router = useRouter();
-  console.log(router.pathname);
 
   return (
     <>

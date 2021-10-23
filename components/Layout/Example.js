@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
   Popover,
 } from "react-bootstrap";
+import { deletePost } from "../../utils/postActions";
 
 const Overlay = () => {
   const popover = (
@@ -19,7 +20,7 @@ const Overlay = () => {
   return popover;
 };
 
-const Example = () => {
+const Example = ({ post, setPosts, setShowToastr }) => {
   return (
     <OverlayTrigger
       trigger="click"
@@ -30,7 +31,12 @@ const Example = () => {
           <Popover style={{ width: "600px", color: "red" }}>
             <Popover.Title as="h3">Are you sure ?</Popover.Title>
             <Popover.Content>
-              <Button className="btn-danger">Delete</Button>
+              <Button
+                className="btn-danger"
+                onClick={() => deletePost(post._id, setPosts, setShowToastr)}
+              >
+                Delete
+              </Button>
             </Popover.Content>
           </Popover>
         </div>
@@ -43,6 +49,7 @@ const Example = () => {
             fontSize: "32px",
             color: "red",
             marginRight: "0px",
+            cursor: "pointer",
           }}
         ></i>
       </div>
