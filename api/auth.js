@@ -54,7 +54,6 @@ router.post("/", async (req, res) => {
       }
     );
   } catch (error) {
-    console.error(error);
     return res.status(500).send(`Server error`);
   }
 });

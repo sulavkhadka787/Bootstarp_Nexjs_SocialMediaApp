@@ -11,21 +11,16 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   const [showToastr, setShowToastr] = useState(false);
 
   useEffect(() => {
-    console.log("hittttt", document.title);
-
-    document.title = `Welcome, ${user.name.split(" ")[0]}`;
-    console.log("hittttt222", document.title);
+    document.title = `Welcome, ${user.name}`;
   }, [user]);
 
   useEffect(() => {
     showToastr && setTimeout(() => setShowToastr(false), 3000);
   }, [showToastr]);
 
-  if (posts.length === 0 || errorLoading) {
-    return <div>No Posts</div>;
-  }
   return (
     <>
+      <div>Username:{user.username}</div>
       {showToastr && <PostDeleteToastr />}
       <CreatePost user={user} setPosts={setPosts} />
       {posts.length === 0 ? (

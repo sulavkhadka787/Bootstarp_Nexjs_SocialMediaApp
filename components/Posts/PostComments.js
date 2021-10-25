@@ -2,6 +2,7 @@ import { useState } from "react";
 import calculateTime from "../../utils/calculateTime";
 import { Col, Image } from "react-bootstrap";
 import Link from "next/link";
+import { deleteComment } from "../../utils/postActions";
 
 const PostComments = ({ post, comment, user, setComments }) => {
   const [disabled, setDisabled] = useState(false);
@@ -36,6 +37,9 @@ const PostComments = ({ post, comment, user, setComments }) => {
                   marginRight: "0px",
                   cursor: "pointer",
                 }}
+                onClick={() =>
+                  deleteComment(post._id, comment._id, setComments)
+                }
               ></i>
             </div>
           )}

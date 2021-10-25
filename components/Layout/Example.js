@@ -1,13 +1,4 @@
-import {
-  Container,
-  Modal,
-  Button,
-  Row,
-  Col,
-  Image,
-  OverlayTrigger,
-  Popover,
-} from "react-bootstrap";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { deletePost } from "../../utils/postActions";
 
 const Overlay = () => {

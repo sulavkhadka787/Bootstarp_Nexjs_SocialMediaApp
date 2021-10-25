@@ -5,9 +5,11 @@ import PostComments from "../Posts/PostComments";
 import Link from "next/link";
 import calculateTime from "../../utils/calculateTime";
 import CommentInputField from "../Posts/CommentInputField";
+import { likePost } from "../../utils/postActions";
+import LikeList from "../Posts/LikeList";
 
 const CardPost = ({ user, post, setPosts, setShowToastr }) => {
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   const [likes, setLikes] = useState(post.likes);
   const [comments, setComments] = useState(post.comments);
@@ -36,14 +38,14 @@ const CardPost = ({ user, post, setPosts, setShowToastr }) => {
               <Image
                 style={{ height: "40px", width: "40px" }}
                 roundedCircle
-                src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+                src={user.profilePicUrl}
               />
             </div>
 
             <div className="px-3">
               {" "}
               <Link href={`/${post.user.username}`}>
-                <a>Sulav Khadka</a>
+                <a>{post.user.username}</a>
               </Link>
               <br />
               <span>{calculateTime(post.createdAt)}</span> |{" "}
@@ -65,24 +67,24 @@ const CardPost = ({ user, post, setPosts, setShowToastr }) => {
         </Row>
         <hr />
         <Row>
-          <span>
+          <div className="d-inline">
             {isLiked ? (
-              <i className="fa fa-heart" style={{ color: "red" }}></i>
+              <i
+                className="fa fa-heart"
+                style={{ color: "red" }}
+                onClick={() => likePost(post._id, user._id, setLikes, false)}
+              ></i>
             ) : (
-              <i class="fa fa-heart-o"></i>
-            )}
-
-            {likes.length > 0 && (
-              <span>
-                {" "}
-                {`${likes.length} ${
-                  likes.length === 1 ? "like" : "likes"
-                }`}{" "}
-              </span>
+              <i
+                className="fa fa-heart-o"
+                onClick={() => likePost(post._id, user._id, setLikes, true)}
+              ></i>
             )}
             {"   "}
+            {likes.length > 0 && <LikeList postId={post._id} />}
+            {"  "}
             <i className="fa fa-comment-o"></i>
-          </span>
+          </div>
         </Row>
         <Row>
           {comments.map((comment, i) => (
