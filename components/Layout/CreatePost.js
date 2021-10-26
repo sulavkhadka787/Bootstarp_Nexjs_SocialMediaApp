@@ -55,6 +55,10 @@ const CreatePost = ({ user, setPosts }) => {
       setNewPost,
       setError
     );
+    setMedia(null);
+    URL.revokeObjectURL(mediaPreview);
+    setMediaPreview(null);
+    setLoading(false);
   };
   return (
     <>

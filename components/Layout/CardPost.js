@@ -7,6 +7,8 @@ import calculateTime from "../../utils/calculateTime";
 import CommentInputField from "../Posts/CommentInputField";
 import { likePost } from "../../utils/postActions";
 import LikeList from "../Posts/LikeList";
+import ImageModal from "../Posts/ImageModal";
+import NoImageModal from "../Posts/NoImageModal";
 
 const CardPost = ({ user, post, setPosts, setShowToastr }) => {
   const [modalShow, setModalShow] = useState(false);
@@ -32,7 +34,10 @@ const CardPost = ({ user, post, setPosts, setShowToastr }) => {
           </Row>
         )}
 
-        <Row className="mt-3 mb-3 justify-content-between">
+        <Row
+          className="mt-3 mb-3 justify-content-between"
+          onClick={() => setModalShow(true)}
+        >
           <Col className="d-flex flex-grow-1 col-md-10">
             <div>
               <Image
@@ -111,7 +116,29 @@ const CardPost = ({ user, post, setPosts, setShowToastr }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+          {post.picUrl ? (
+            <ImageModal
+              comments={comments}
+              likes={likes}
+              isLiked={isLiked}
+              user={user}
+              post={post}
+              setPosts={setPosts}
+              setShowToastr={setShowToastr}
+              setComments={setComments}
+            />
+          ) : (
+            <NoImageModal
+              comments={comments}
+              likes={likes}
+              isLiked={isLiked}
+              user={user}
+              post={post}
+              setPosts={setPosts}
+              setShowToastr={setShowToastr}
+              setComments={setComments}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={onHide}>Close</Button>

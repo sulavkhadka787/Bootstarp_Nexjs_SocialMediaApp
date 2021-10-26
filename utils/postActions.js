@@ -17,8 +17,14 @@ export const submitNewPost = async (
   setError
 ) => {
   try {
-    const res = await Axios.post("/", { text, location, picUrl });
-
+    //const res = await Axios.post("/", { text, location, picUrl });
+    const res = await axios.post(
+      `${baseUrl}/api/posts`,
+      { text, location, picUrl },
+      {
+        headers: { Authorization: cookie.get("token") },
+      }
+    );
     setPosts((prev) => [res.data, ...prev]);
     setNewPost({ text: "", location: "" });
   } catch (error) {
@@ -40,10 +46,24 @@ export const deletePost = async (postId, setPosts, setShowToastr) => {
 export const likePost = async (postId, userId, setLikes, like = true) => {
   try {
     if (like) {
-      await Axios.post(`/like/${postId}`);
+      //await Axios.post(`/like/${postId}`);
+      await axios.post(
+        `${baseUrl}/api/posts/like/${postId}`,
+        {},
+        {
+          headers: { Authorization: cookie.get("token") },
+        }
+      );
       setLikes((prev) => [...prev, { user: userId }]);
     } else if (!like) {
-      await Axios.put(`/unlike/${postId}`);
+      //await Axios.put(`/unlike/${postId}`);
+      await axios.put(
+        `${baseUrl}/api/posts/like/${postId}`,
+        {},
+        {
+          headers: { Authorization: cookie.get("token") },
+        }
+      );
       setLikes((prev) => prev.filter((liked) => liked.user !== userId));
     }
   } catch (error) {

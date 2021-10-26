@@ -11,7 +11,7 @@ const PostComments = ({ post, comment, user, setComments }) => {
       <Col className="d-flex flex-grow-1 col-md-10 my-3">
         <div>
           <Image
-            style={{ height: "40px", width: "40px" }}
+            style={{ height: "30px", width: "30px" }}
             rounded
             src={comment.user.profilePicUrl}
           />
