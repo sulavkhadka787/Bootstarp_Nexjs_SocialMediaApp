@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-  console.log("middleware hit===========", req.headers.authorization);
   try {
     if (!req.headers.authorization) {
       return res
