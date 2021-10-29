@@ -71,3 +71,7 @@ a:hover {
 .fa-trash-o {
   font-size: 24px;
 }
+
+.profile-menu-links {
+  cursor: pointer;
+}
