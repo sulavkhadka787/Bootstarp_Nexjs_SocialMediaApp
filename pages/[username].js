@@ -8,6 +8,8 @@ import { Row, Col } from "react-bootstrap";
 import ProfileMenuTabs from "../components/Profile/ProfileMenuTabs";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import Cardpost from "../components/Layout/CardPost";
+import Following from "../components/Profile/Following";
+import Follower from "../components/Profile/Follower";
 
 function ProfilePage({
   profile,
@@ -61,27 +63,53 @@ function ProfilePage({
           <ProfileMenuTabs
             activeItem={activeItem}
             handleItemClick={handleItemClick}
-          />
-          <ProfileHeader
-            profile={profile}
-            ownAccount={ownAccount}
             loggedUserFollowStats={loggedUserFollowStats}
-            setUserFollowStats={setUserFollowStats}
+            followersLength={followersLength}
+            ownAccount={ownAccount}
+            followingLength={followingLength}
           />
-          {loading ? (
-            <div>Loading...</div>
-          ) : posts.length > 0 ? (
-            posts.map((post) => (
-              <Cardpost
-                key={post._id}
-                user={user}
-                post={post}
-                setPosts={setPosts}
-                setShowToastr={setShowToastr}
+          {activeItem === "profile" && (
+            <>
+              <ProfileHeader
+                profile={profile}
+                ownAccount={ownAccount}
+                loggedUserFollowStats={loggedUserFollowStats}
+                setUserFollowStats={setUserFollowStats}
               />
-            ))
-          ) : (
-            <div>No posts</div>
+              {loading ? (
+                <div>Loading...</div>
+              ) : posts.length > 0 ? (
+                posts.map((post) => (
+                  <Cardpost
+                    key={post._id}
+                    user={user}
+                    post={post}
+                    setPosts={setPosts}
+                    setShowToastr={setShowToastr}
+                  />
+                ))
+              ) : (
+                <div>No posts</div>
+              )}
+            </>
+          )}
+
+          {activeItem === "following" && (
+            <Following
+              user={user}
+              loggedUserFollowStats={loggedUserFollowStats}
+              setUserFollowStats={setUserFollowStats}
+              profileUserId={profile.user._id}
+            />
+          )}
+
+          {activeItem === "followers" && (
+            <Follower
+              user={user}
+              loggedUserFollowStats={loggedUserFollowStats}
+              setUserFollowStats={setUserFollowStats}
+              profileUserId={profile.user._id}
+            />
           )}
         </Col>
       </Row>

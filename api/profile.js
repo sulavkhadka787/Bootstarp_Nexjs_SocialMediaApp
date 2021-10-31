@@ -75,7 +75,7 @@ router.get("/followers/:userId", authMiddleware, async (req, res) => {
   }
 });
 
-//GET FOLLOWERS
+//GET FOLLOWing
 router.get("/following/:userId", authMiddleware, async (req, res) => {
   const { userId } = req.params;
   try {

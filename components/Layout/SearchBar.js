@@ -70,7 +70,7 @@ const SearchBar = () => {
               className={showDropdown ? "show" : "dropdown-content"}
               onClick={(e) => {
                 e.preventDefault();
-                Router.push(`/username`);
+                Router.push(`/${r.username}`);
                 console.log(r.username);
                 setShowDropdown(false);
                 inputRef.current.value = "";
