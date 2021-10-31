@@ -75,3 +75,8 @@ a:hover {
 .profile-menu-links {
   cursor: pointer;
 }
+
+.profile-menu-links-selected {
+  color: orange;
+  font-weight: 400;
+}

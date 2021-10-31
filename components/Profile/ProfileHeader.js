@@ -1,24 +1,47 @@
-import { Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({
+  profile,
+  ownAccount,
+  loggedUserFollowStats,
+  setUserFollowStats,
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const isFollowing =
+    loggedUserFollowStats.following.length > 0 &&
+    loggedUserFollowStats.following.filter(
+      (following) => following.user === profile.user._id
+    ).length > 0;
   return (
     <>
       <Row>
         <Col className="col-md-6">
-          <span style={{ fontSize: "40px" }}>Sulav 787</span>
+          <span style={{ fontSize: "40px" }}>{profile.user.name}</span>
           <br />
-          <span>Bio of sulav 787 bio</span>
+          <span>{profile.bio}</span>
           <br />
           <br />
           <br />
           <span>No social Media link</span>
         </Col>
-        <Col className="col-md-6">
-          <img
-            className="float-end"
-            style={{ borderRadius: "50%", height: "300px", width: "300px" }}
-            src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
-          />
+        <Col className="col-md-6 d-flex flex-column">
+          <div>
+            <img
+              className="float-end"
+              style={{ borderRadius: "50%", height: "300px", width: "300px" }}
+              src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+            />
+          </div>
+
+          <div className="mx-auto mt-3">
+            {!ownAccount && (
+              <Button style={{ width: "200px", marginLeft: "120px" }}>
+                {isFollowing ? "following" : "follow"}
+              </Button>
+            )}
+          </div>
         </Col>
       </Row>
     </>

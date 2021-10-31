@@ -7,6 +7,7 @@ import cookie from "js-cookie";
 import { Row, Col } from "react-bootstrap";
 import ProfileMenuTabs from "../components/Profile/ProfileMenuTabs";
 import ProfileHeader from "../components/Profile/ProfileHeader";
+import Cardpost from "../components/Layout/CardPost";
 
 function ProfilePage({
   profile,
@@ -23,10 +24,9 @@ function ProfilePage({
   const [showToastr, setShowToastr] = useState(false);
 
   const [activeItem, setActiveItem] = useState("profile");
-  const handleClickItem = (clickedTab) => setActiveItem(clickedTab);
+  const handleItemClick = (clickedTab) => setActiveItem(clickedTab);
 
-  const [loggedUserFollowStats, setLoggedUserFollowStats] =
-    useState(userFollowStats);
+  const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowStats);
 
   const ownAccount = profile.user._id === user._id;
 
@@ -48,17 +48,41 @@ function ProfilePage({
       } catch (error) {
         alert("Error Loading Posts");
       }
+      setLoading(false);
     };
 
     getPosts();
-  }, []);
+  }, [router.query.username]);
 
   return (
     <>
       <Row>
         <Col>
-          <ProfileMenuTabs />
-          <ProfileHeader />
+          <ProfileMenuTabs
+            activeItem={activeItem}
+            handleItemClick={handleItemClick}
+          />
+          <ProfileHeader
+            profile={profile}
+            ownAccount={ownAccount}
+            loggedUserFollowStats={loggedUserFollowStats}
+            setUserFollowStats={setUserFollowStats}
+          />
+          {loading ? (
+            <div>Loading...</div>
+          ) : posts.length > 0 ? (
+            posts.map((post) => (
+              <Cardpost
+                key={post._id}
+                user={user}
+                post={post}
+                setPosts={setPosts}
+                setShowToastr={setShowToastr}
+              />
+            ))
+          ) : (
+            <div>No posts</div>
+          )}
         </Col>
       </Row>
     </>
