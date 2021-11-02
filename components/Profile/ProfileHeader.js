@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
+import { followUser, unfollowUser } from "../../utils/profileActions";
 
 const ProfileHeader = ({
   profile,
@@ -37,7 +38,16 @@ const ProfileHeader = ({
 
           <div className="mx-auto mt-3">
             {!ownAccount && (
-              <Button style={{ width: "200px", marginLeft: "120px" }}>
+              <Button
+                style={{ width: "200px", marginLeft: "120px" }}
+                onClick={async () => {
+                  setLoading(true);
+                  isFollowing
+                    ? await unfollowUser(profile.user._id, setUserFollowStats)
+                    : await followUser(profile.user._id, setUserFollowStats);
+                  setLoading(false);
+                }}
+              >
                 {isFollowing ? "following" : "follow"}
               </Button>
             )}

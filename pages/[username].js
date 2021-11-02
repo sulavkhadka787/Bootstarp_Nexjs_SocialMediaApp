@@ -10,6 +10,7 @@ import ProfileHeader from "../components/Profile/ProfileHeader";
 import Cardpost from "../components/Layout/CardPost";
 import Following from "../components/Profile/Following";
 import Follower from "../components/Profile/Follower";
+import UpdateProfile from "../components/Profile/updateProfile";
 
 function ProfilePage({
   profile,
@@ -110,6 +111,10 @@ function ProfilePage({
               setUserFollowStats={setUserFollowStats}
               profileUserId={profile.user._id}
             />
+          )}
+
+          {activeItem === "updateProfile" && (
+            <UpdateProfile Profile={Profile} />
           )}
         </Col>
       </Row>

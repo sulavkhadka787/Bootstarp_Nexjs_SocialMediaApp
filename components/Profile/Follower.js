@@ -3,6 +3,7 @@ import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import cookie from "js-cookie";
 import { Row, Col, Button } from "react-bootstrap";
+import { followUser, unfollowUser } from "../../utils/profileActions";
 
 const Follower = ({
   user,
@@ -62,7 +63,23 @@ const Follower = ({
                   </a>
                 </div>
                 <div>
-                  <Button>{isFollowing ? "Following" : "Follow"}</Button>
+                  <Button
+                    onClick={async () => {
+                      setFollowLoading(true);
+                      isFollowing
+                        ? await unfollowUser(
+                            profileFollower.user._id,
+                            setUserFollowStats
+                          )
+                        : await followUser(
+                            profileFollower.user._id,
+                            setUserFollowStats
+                          );
+                      setFollowLoading(false);
+                    }}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </Button>
                 </div>
               </Col>
             </Row>

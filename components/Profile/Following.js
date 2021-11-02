@@ -3,6 +3,7 @@ import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import cookie from "js-cookie";
 import { Row, Col, Button } from "react-bootstrap";
+import { followUser, unfollowUser } from "../../utils/profileActions";
 
 const Following = ({
   user,
@@ -39,24 +40,51 @@ const Following = ({
         <div>Loading...</div>
       ) : (
         following.length > 0 &&
-        following.map((profileFollowing) => (
-          <Row key={profileFollowing._id} className="my-1">
-            <Col className="d-flex justify-content-between">
-              <div>
-                <img
-                  src={profileFollowing.user.profilePicUrl}
-                  style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-                />
-                <a href={`/${profileFollowing.user.username}`}>
-                  <span>{profileFollowing.user.name}</span>
-                </a>
-              </div>
-              <div>
-                <Button>Following</Button>
-              </div>
-            </Col>
-          </Row>
-        ))
+        following.map((profileFollowing) => {
+          const isFollowing =
+            loggedUserFollowStats.following.length > 0 &&
+            loggedUserFollowStats.following.filter(
+              (following) => following.user === profileFollowing.user._id
+            ).length > 0;
+          return (
+            <Row key={profileFollowing._id} className="my-1">
+              <Col className="d-flex justify-content-between">
+                <div>
+                  <img
+                    src={profileFollowing.user.profilePicUrl}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <a href={`/${profileFollowing.user.username}`}>
+                    <span>{profileFollowing.user.name}</span>
+                  </a>
+                </div>
+                <div>
+                  <Button
+                    onClick={async () => {
+                      setFollowLoading(true);
+                      isFollowing
+                        ? await unfollowUser(
+                            profileFollowing.user._id,
+                            setUserFollowStats
+                          )
+                        : await followUser(
+                            profileFollowing.user._id,
+                            setUserFollowStats
+                          );
+                      setFollowLoading(false);
+                    }}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          );
+        })
       )}
     </>
   );
