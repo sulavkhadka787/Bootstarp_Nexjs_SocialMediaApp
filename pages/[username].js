@@ -114,7 +114,7 @@ function ProfilePage({
           )}
 
           {activeItem === "updateProfile" && (
-            <UpdateProfile Profile={Profile} />
+            <UpdateProfile Profile={profile} />
           )}
         </Col>
       </Row>

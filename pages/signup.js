@@ -265,7 +265,12 @@ const Signup = () => {
                     <InputGroup.Text>
                       <i class="fa fa-facebook"></i>
                     </InputGroup.Text>
-                    <Form.Control type="text" placeholder="Facebook" />
+                    <Form.Control
+                      type="text"
+                      placeholder="Facebook"
+                      name="facebook"
+                      value={facebook}
+                    />
                   </InputGroup>
                 </Form.Group>
 
@@ -274,7 +279,12 @@ const Signup = () => {
                     <InputGroup.Text>
                       <i className="fa fa-twitter"></i>
                     </InputGroup.Text>
-                    <Form.Control type="text" placeholder="twitter" />
+                    <Form.Control
+                      type="text"
+                      placeholder="twitter"
+                      name="twitter"
+                      value={twitter}
+                    />
                   </InputGroup>
                 </Form.Group>
 
@@ -283,7 +293,12 @@ const Signup = () => {
                     <InputGroup.Text>
                       <i class="fa fa-instagram"></i>
                     </InputGroup.Text>
-                    <Form.Control type="text" placeholder="instagram" />
+                    <Form.Control
+                      type="text"
+                      placeholder="instagram"
+                      name="instagram"
+                      value={instagram}
+                    />
                   </InputGroup>
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -291,7 +306,12 @@ const Signup = () => {
                     <InputGroup.Text>
                       <i className="fa fa-youtube-play"></i>
                     </InputGroup.Text>
-                    <Form.Control type="text" placeholder="youtube" />
+                    <Form.Control
+                      type="text"
+                      placeholder="youtube"
+                      name="youtube"
+                      value={youtube}
+                    />
                   </InputGroup>
                 </Form.Group>
               </Col>

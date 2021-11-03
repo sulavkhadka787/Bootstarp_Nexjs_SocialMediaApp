@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { Row, Col, Form, Image, Button, InputGroup } from "react-bootstrap";
+import uploadPic from "../../utils/uploadPicToCloudinary";
+import { profileUpdate } from "../../utils/profileActions";
 
 const UpdateProfile = ({ Profile }) => {
   const [profile, setProfile] = useState({
@@ -22,8 +24,35 @@ const UpdateProfile = ({ Profile }) => {
   const [showSocialLinks, setShowSocialLinks] = useState(false);
   const inputRef = useRef();
 
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    if (name === "media") {
+      setMedia(files[0]);
+      setMediaPreview(URL.createObjectURL(files[0]));
+    }
+    setProfile((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    let profilePicUrl;
+    if (media !== null) {
+      profilePicUrl = await uploadPic(media);
+    }
+
+    if (media !== null && !profilePicUrl) {
+      setLoading(false);
+      return setErrorMsg("Error uploading image");
+    }
+
+    await profileUpdate(profile, setLoading, setErrorMsg, profilePicUrl);
+  };
+
   return (
     <>
+      {JSON.stringify(profile)}
       <Row>
         <Col>
           {errorMsg && (
@@ -31,13 +60,13 @@ const UpdateProfile = ({ Profile }) => {
               <strong style={{ color: "red" }}>
                 Error!
                 <br />
-                {error}
+                {errorMsg}
               </strong>
             </div>
           )}
         </Col>
       </Row>
-      <Form className="mt-3">
+      <Form className="mt-3" onSubmit={handleSubmit}>
         <Row className="d-flex flex-column">
           <Col className="col-md-10 mx-auto">
             <Form.Control
@@ -55,7 +84,7 @@ const UpdateProfile = ({ Profile }) => {
               style={{ cursor: "pointer" }}
             >
               <img
-                src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+                src={profile.profilePicUrl}
                 style={{ height: "500px", width: "700px" }}
               />
             </div>
@@ -67,6 +96,7 @@ const UpdateProfile = ({ Profile }) => {
               placeholder="bio"
               name="bio"
               value={profile.bio}
+              onChange={handleChange}
             />
           </Col>
           <Button
@@ -88,6 +118,8 @@ const UpdateProfile = ({ Profile }) => {
                     type="text"
                     placeholder="Facebook"
                     onChange={handleChange}
+                    name="facebook"
+                    value={profile.facebook}
                   />
                 </InputGroup>
               </Form.Group>
@@ -101,6 +133,8 @@ const UpdateProfile = ({ Profile }) => {
                     type="text"
                     placeholder="twitter"
                     onChange={handleChange}
+                    name="twitter"
+                    value={profile.twitter}
                   />
                 </InputGroup>
               </Form.Group>
@@ -114,6 +148,8 @@ const UpdateProfile = ({ Profile }) => {
                     type="text"
                     placeholder="instagram"
                     onChange={handleChange}
+                    name="instagram"
+                    value={profile.instagram}
                   />
                 </InputGroup>
               </Form.Group>
@@ -126,6 +162,8 @@ const UpdateProfile = ({ Profile }) => {
                     type="text"
                     placeholder="youtube"
                     onChange={handleChange}
+                    name="youtube"
+                    value={profile.youtube}
                   />
                 </InputGroup>
               </Form.Group>
@@ -140,7 +178,7 @@ const UpdateProfile = ({ Profile }) => {
           className="mb-3"
           disabled={profile.bio === "" || loading}
         >
-          Sign-Up
+          Update-Profile
         </Button>
       </Form>
     </>
