@@ -198,7 +198,7 @@ router.post("/update", authMiddleware, async (req, res) => {
 
     if (profilePicUrl) {
       const user = await UserModel.findById(userId);
-      user.profilePicUrl = profileUrl;
+      user.profilePicUrl = profilePicUrl;
       await user.save();
     }
 

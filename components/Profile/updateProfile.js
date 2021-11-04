@@ -52,7 +52,6 @@ const UpdateProfile = ({ Profile }) => {
 
   return (
     <>
-      {JSON.stringify(profile)}
       <Row>
         <Col>
           {errorMsg && (
@@ -84,7 +83,7 @@ const UpdateProfile = ({ Profile }) => {
               style={{ cursor: "pointer" }}
             >
               <img
-                src={profile.profilePicUrl}
+                src={mediaPreview ? mediaPreview : profile.profilePicUrl}
                 style={{ height: "500px", width: "700px" }}
               />
             </div>

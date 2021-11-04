@@ -32,7 +32,7 @@ const ProfileHeader = ({
             <img
               className="float-end"
               style={{ borderRadius: "50%", height: "300px", width: "300px" }}
-              src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+              src={profile.user.profilePicUrl}
             />
           </div>
 
