@@ -11,6 +11,7 @@ import Cardpost from "../components/Layout/CardPost";
 import Following from "../components/Profile/Following";
 import Follower from "../components/Profile/Follower";
 import UpdateProfile from "../components/Profile/updateProfile";
+import Settings from "../components/Profile/Settings";
 
 function ProfilePage({
   profile,
@@ -116,6 +117,8 @@ function ProfilePage({
           {activeItem === "updateProfile" && (
             <UpdateProfile Profile={profile} />
           )}
+
+          {activeItem === "settings" && <Settings />}
         </Col>
       </Row>
     </>
