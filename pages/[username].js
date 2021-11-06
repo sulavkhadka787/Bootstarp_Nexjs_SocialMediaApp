@@ -118,7 +118,9 @@ function ProfilePage({
             <UpdateProfile Profile={profile} />
           )}
 
-          {activeItem === "settings" && <Settings />}
+          {activeItem === "settings" && (
+            <Settings newMessagePopup={user.newMessagePopup} />
+          )}
         </Col>
       </Row>
     </>

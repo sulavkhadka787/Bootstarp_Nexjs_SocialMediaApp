@@ -43,17 +43,6 @@ export const profileUpdate = async (
 ) => {
   try {
     const { bio, facebook, youtube, twitter, instagram } = profile;
-    console.log("update-bioooooooo", bio);
-
-    // await Axios.post(`/update`, {
-    //   bio,
-    //   facebook,
-    //   youtube,
-    //   twitter,
-    //   instagram,
-    //   profilePicUrl,
-    // });
-
     await axios.post(
       `${baseUrl}/api/profile/update`,
       {
@@ -72,5 +61,29 @@ export const profileUpdate = async (
   } catch (error) {
     setError(catchErrors(error));
     setLoading(false);
+  }
+};
+
+export const passwordUpdate = async (setSuccess, userPasswords) => {
+  try {
+    const { currentPassword, newPassword } = userPasswords;
+    await Axios.post(`/settings/password`, { currentPassword, newPassword });
+    setSuccess(true);
+  } catch (error) {
+    alert(catchErrors(error));
+  }
+};
+
+export const toggleMessagePopup = async (
+  popupSetting,
+  setPopupSetting,
+  setSuccess
+) => {
+  try {
+    await Axios.post(`/settings/messagePopup`);
+    setPopupSetting(!popupSetting);
+    setSuccess(true);
+  } catch (error) {
+    alert(catchErrors(error));
   }
 };
