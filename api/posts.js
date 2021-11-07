@@ -5,6 +5,10 @@ const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
 const FollowerModel = require("../models/FollowerModel");
 const uuid = require("uuid").v4;
+const {
+  newLikeNotification,
+  removeLikeNotification,
+} = require("../utils/notificationActions");
 
 //CREATE A POST
 
@@ -58,7 +62,31 @@ router.get("/", authMiddleware, async (req, res) => {
         .populate("comments.user");
     }
 
-    return res.json(posts);
+    const { userId } = req;
+    const loggedUser = await FollowerModel.findOne({ user: userId });
+
+    if (posts.length === 0) {
+      return res.json([]);
+    }
+
+    let postsToBeSent = [];
+
+    if (loggedUser.following.length === 0) {
+      postsToBeSent = posts.filter(
+        (post) => post.user._id.toString() === userId
+      );
+    } else {
+      for (let i = 0; i < loggedUser.following.length; i++) {
+        const foundPosts = posts.filter(
+          (post) =>
+            post.user._id.toString() ===
+              loggedUser.following[i].user.toString() ||
+            post.user._id.toString() === userId
+        );
+        if (foundPosts.length > 0) postsToBeSent.push(...foundPosts);
+      }
+    }
+    return res.json(postsToBeSent);
   } catch (error) {
     console.error(error);
     return res.status(500).send(`Server error`);
@@ -164,6 +192,10 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
     await post.likes.unshift({ user: userId });
     await post.save();
 
+    if (post.user.toString() !== userId) {
+      await newLikeNotification(userId, postId, post.user.toString());
+    }
+
     return res.status(200).send("Post liked");
   } catch (error) {
     console.error(error);
@@ -197,6 +229,10 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
 
     await post.likes.splice(index, 1);
     await post.save();
+
+    if (post.user.toString() !== userId) {
+      await removeLikeNotification(userId, postId, post.user.toString());
+    }
 
     return res.status(200).send("Post unLiked");
   } catch (error) {

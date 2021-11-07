@@ -107,7 +107,12 @@ const UpdatePassword = ({
             value={currentPassword}
             onChange={handleChange}
           />
-          <Button className="mt-3 btn btn-primary float-end mb-3">
+          <Button
+            className="mt-3 btn btn-primary float-end mb-3"
+            onClick={() =>
+              setShowTypedPassword((prev) => ({ ...prev, field1: !field1 }))
+            }
+          >
             <i className="fa fa-user-secret"></i> Show Password
           </Button>
         </Form.Group>
@@ -122,11 +127,21 @@ const UpdatePassword = ({
             onChange={handleChange}
           />
 
-          <Button className="mt-3 btn btn-primary float-end mb-3">
+          <Button
+            className="mt-3 btn btn-primary float-end mb-3"
+            onClick={() =>
+              setShowTypedPassword((prev) => ({ ...prev, field2: !field2 }))
+            }
+          >
             <i className="fa fa-user-secret"></i> Show Password
           </Button>
         </Form.Group>
-        <Button style={{ width: "300px" }} className="btn-dark" type="submit">
+        <Button
+          style={{ width: "300px" }}
+          className="btn-dark"
+          type="submit"
+          disabled={loading || newPassword === "" || currentPassword === ""}
+        >
           Change Password
         </Button>
       </Form>
