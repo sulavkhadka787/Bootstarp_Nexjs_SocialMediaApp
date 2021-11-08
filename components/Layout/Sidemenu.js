@@ -26,7 +26,12 @@ const Sidemenu = ({
           </Link>
         </Nav.Item>
         <Nav.Item className="mb-4 nav-links">
-          <i className="fa fa-bell"></i>
+          {unreadNotification ? (
+            <i className="fa fa-bell" style={{ color: "red" }}></i>
+          ) : (
+            <i className="fa fa-bell"></i>
+          )}
+
           <Link
             href="/notifications"
             className={

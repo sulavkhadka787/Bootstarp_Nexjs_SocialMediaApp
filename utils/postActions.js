@@ -74,7 +74,13 @@ export const likePost = async (postId, userId, setLikes, like = true) => {
 
 export const postComment = async (postId, user, text, setComments, setText) => {
   try {
-    const res = await Axios.post(`/comment/${postId}`, { text });
+    const res = await axios.post(
+      `${baseUrl}/api/posts/comment/${postId}`,
+      { text },
+      {
+        headers: { Authorization: cookie.get("token") },
+      }
+    );
     const newComment = {
       _id: res.data,
       user,
