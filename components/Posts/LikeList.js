@@ -16,7 +16,7 @@ const LikeList = ({ postId }) => {
       const res = await axios.get(`${baseUrl}/api/posts/like/${postId}`, {
         headers: { Authorization: cookie.get("token") },
       });
-      console.log("likelist", res.data);
+
       setLikesList(res.data);
     } catch (error) {
       alert(catchErrors(error));

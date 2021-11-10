@@ -38,7 +38,6 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
 
   return (
     <>
-      <div>Username:{user.username}</div>
       {showToastr && <PostDeleteToastr />}
       <CreatePost user={user} setPosts={setPosts} />
       {posts.length === 0 ? (
@@ -51,9 +50,9 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
           endMessage={<h4>No More Posts</h4>}
           dataLength={posts.length}
         >
-          {posts.map((post) => (
+          {posts.map((post, index) => (
             <CardPost
-              key={post._id}
+              key={index}
               post={post}
               setPosts={setPosts}
               user={user}

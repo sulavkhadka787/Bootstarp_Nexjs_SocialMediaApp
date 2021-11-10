@@ -36,7 +36,9 @@ const CardPost = ({ user, post, setPosts, setShowToastr }) => {
 
         <Row
           className="mt-3 mb-3 justify-content-between"
-          onClick={() => setModalShow(true)}
+          onClick={() => {
+            !post.picUrl && setModalShow(true);
+          }}
         >
           <Col className="d-flex flex-grow-1 col-md-10">
             <div>

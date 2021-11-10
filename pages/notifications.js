@@ -19,34 +19,27 @@ const Notifications = ({
       <Row>
         {notifications && notifications.length > 0 ? (
           <Col>
-            {notifications.map((notification) => (
-              <>
+            {notifications.map((notification, i) => (
+              <div key={i}>
                 {notification.type === "newLike" &&
                   notification.post !== null && (
-                    <LikeNotification
-                      key={notification._id}
-                      notification={notification}
-                    />
+                    <LikeNotification notification={notification} />
                   )}
 
                 {notification.type === "newComment" &&
                   notification.post !== null &&
                   notification.post !== null && (
-                    <CommentNotification
-                      key={notification._id}
-                      notification={notification}
-                    />
+                    <CommentNotification notification={notification} />
                   )}
 
                 {notification.type === "newFollower" && (
                   <FollowerNotification
-                    key={notification._id}
                     notification={notification}
                     loggedUserFollowStats={loggedUserFollowStats}
                     setUserFollowStats={setUserFollowStats}
                   />
                 )}
-              </>
+              </div>
             ))}
           </Col>
         ) : (

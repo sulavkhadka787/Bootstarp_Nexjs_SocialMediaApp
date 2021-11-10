@@ -18,7 +18,7 @@ const FollowerNotification = ({
   return (
     <>
       <Row>
-        <Col className="d-flex justify-content-between">
+        <Col className="d-flex justify-content-between my-1">
           <div>
             <Image
               style={{ height: "30px", width: "40px" }}
@@ -49,6 +49,7 @@ const FollowerNotification = ({
             </Button>
           </div>
         </Col>
+        <hr />
       </Row>
     </>
   );
