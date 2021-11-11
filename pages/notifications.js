@@ -6,6 +6,7 @@ import { Row, Col } from "react-bootstrap";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import { parseCookies } from "nookies";
+import cookie from "js-cookie";
 
 const Notifications = ({
   notifications,
@@ -14,6 +15,21 @@ const Notifications = ({
   userFollowStats,
 }) => {
   const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowStats);
+
+  useEffect(() => {
+    const notificationRead = async () => {
+      try {
+        await axios.post(
+          `${baseUrl}/api/notifications`,
+          {},
+          { headers: { Authorization: cookie.get("token") } }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    notificationRead();
+  }, []);
   return (
     <>
       <Row>
