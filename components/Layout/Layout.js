@@ -4,7 +4,6 @@ import nProgress from "nprogress";
 
 import Sidemenu from "./Sidemenu";
 import SearchBar from "./SearchBar";
-import CreatePost from "./CreatePost";
 import HeadTags from "./HeadTags";
 import TopNavbar from "./TopNavbar";
 import { Container, Row, Col } from "react-bootstrap";

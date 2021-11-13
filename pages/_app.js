@@ -5,6 +5,7 @@ import baseUrl from "../utils/baseUrl";
 import Layout from "../components/Layout/Layout";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-toastify/dist/ReactToastify.css";
+import "../components/chatbox/chatbox.css";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
@@ -22,8 +23,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     ctx.pathname === "/" ||
     ctx.pathname === "/[username]" ||
     ctx.pathname === "/post/[postId]" ||
-    ctx.pathname === "/notifications";
-
+    ctx.pathname === "/notifications" ||
+    ctx.pathname === "/messages";
   if (!token) {
     protectedRoutes && redirectUser(ctx, "/login");
   } else {
