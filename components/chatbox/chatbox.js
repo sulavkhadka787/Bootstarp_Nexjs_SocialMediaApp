@@ -5,9 +5,8 @@ const Chatbox = ({ user, chats, setChats, connectedUsers }) => {
   return (
     <div id="container">
       <aside>
-        <ChatlistSearch />
-
-        <ChatUsers />
+        <ChatlistSearch chats={chats} setChats={setChats} />
+        {chats.length > 0 && <ChatUsers chats={chats} />}
       </aside>
       <main>
         <header>

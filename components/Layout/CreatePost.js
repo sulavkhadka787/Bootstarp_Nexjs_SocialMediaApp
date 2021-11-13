@@ -81,7 +81,7 @@ const CreatePost = ({ user, setPosts }) => {
               <Image
                 style={{ height: "40px", width: "40px" }}
                 roundedCircle
-                src="https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png"
+                src={user.profilePicUrl}
               />
             </Col>
 

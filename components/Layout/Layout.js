@@ -15,23 +15,31 @@ function Layout({ children, user }) {
 
   const router = useRouter();
 
+  const messagesRoute = router.pathname === "/messages";
+
   return (
     <>
       <HeadTags />
       {user ? (
         <Container fluid>
-          <Row md={12}>
-            <Col className="col-md-2 mt-4">
-              <Sidemenu user={user} />
-            </Col>
-            <Col className="mt-3 post-area">
-              <>{children}</>
-            </Col>
+          {!messagesRoute ? (
+            <Row md={12}>
+              <Col className="col-md-2 mt-4">
+                <Sidemenu user={user} />
+              </Col>
+              <Col className="mt-3 post-area">
+                <>{children}</>
+              </Col>
 
-            <Col className="col-md-3 mt-3">
-              <SearchBar />
-            </Col>
-          </Row>
+              <Col className="col-md-3 mt-3">
+                <SearchBar />
+              </Col>
+            </Row>
+          ) : (
+            <Row>
+              <Col>{children}</Col>
+            </Row>
+          )}
         </Container>
       ) : (
         <>

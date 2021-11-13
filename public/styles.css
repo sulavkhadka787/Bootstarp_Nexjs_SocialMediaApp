@@ -127,3 +127,9 @@ input:focus + .slider {
 input:checked + .slider:before {
   transform: translate(26px);
 }
+
+.chatusers-img {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}

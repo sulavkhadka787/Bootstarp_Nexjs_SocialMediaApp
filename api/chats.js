@@ -24,7 +24,7 @@ router.get("/", authMiddleware, async (req, res) => {
         date: chat.messages[chat.messages.length - 1].date,
       }));
     }
-    console.log("chatstopbe sent ========>>>>>", chatsToBeSent);
+
     return res.json(chatsToBeSent);
   } catch (error) {
     console.error(error);
