@@ -1,22 +1,23 @@
 import ChatUsers from "./chatUsers";
 import ChatlistSearch from "./chatlistsearch";
 
-const Chatbox = ({ user, chats, setChats, connectedUsers }) => {
+const Chatbox = ({ user, chats, setChats, connectedUsers, bannerData }) => {
+  const { name, profilePicUrl } = bannerData;
+
   return (
     <div id="container">
       <aside>
         <ChatlistSearch chats={chats} setChats={setChats} />
-        {chats.length > 0 && <ChatUsers chats={chats} />}
+        {chats.length > 0 && (
+          <ChatUsers chats={chats} connectedUsers={connectedUsers} />
+        )}
       </aside>
       <main>
         <header>
-          <img
-            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg"
-            alt=""
-          />
+          <img className="chatusers-img" src={profilePicUrl} alt="" />
           <div>
-            <h2>Chat with Vincent Porter</h2>
-            <h3>already 1902 messages</h3>
+            <h2>Chat with {name}</h2>
+            <h3>Enjoy the conversation</h3>
           </div>
           <img
             src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_star.png"
