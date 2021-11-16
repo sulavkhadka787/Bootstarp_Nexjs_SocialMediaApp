@@ -191,7 +191,7 @@ main footer {
   height: 155px;
   padding: 20px 30px 10px 20px;
 }
-main footer textarea {
+main footer form input {
   resize: none;
   border: none;
   display: block;
@@ -218,4 +218,24 @@ main footer a {
   margin-left: 333px;
   margin-top: 5px;
   display: inline-block;
+}
+
+.msg-box {
+  position: relative;
+}
+.msg-del {
+  position: absolute;
+  right: -20%;
+  top: 10%;
+  z-index: 1000;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  background-color: orange;
+  border-radius: 50%;
+  padding: 2px 5px;
+}
+
+.msg-del-none {
+  display: none;
 }

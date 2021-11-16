@@ -1,15 +1,15 @@
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { deletePost } from "../../utils/postActions";
 
-const Overlay = () => {
-  const popover = (
-    <Popover positionLeft={200} positionTop={50}>
-      <Popover.Title as="h3">Title One</Popover.Title>
-      <Popover.Content>Test Content</Popover.Content>
-    </Popover>
-  );
-  return popover;
-};
+// const Overlay = () => {
+//   const popover = (
+//     <Popover positionLeft={200} positionTop={50}>
+//       <Popover.Title as="h3">Title One</Popover.Title>
+//       <Popover.Content>Test Content</Popover.Content>
+//     </Popover>
+//   );
+//   return popover;
+// };
 
 const Example = ({ post, setPosts, setShowToastr }) => {
   return (

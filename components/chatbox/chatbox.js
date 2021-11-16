@@ -1,8 +1,20 @@
+import { useState } from "react";
 import ChatUsers from "./chatUsers";
 import ChatlistSearch from "./chatlistsearch";
+import MessageInputField from "./MessageInputField";
 
-const Chatbox = ({ user, chats, setChats, connectedUsers, bannerData }) => {
+const Chatbox = ({
+  user,
+  chats,
+  setChats,
+  connectedUsers,
+  bannerData,
+  messages,
+  sendMsg,
+}) => {
+  const [showIcon, setShowIcon] = useState(false);
   const { name, profilePicUrl } = bannerData;
+  console.log("messages::", messages);
 
   return (
     <div id="container">
@@ -25,84 +37,47 @@ const Chatbox = ({ user, chats, setChats, connectedUsers, bannerData }) => {
           />
         </header>
         <ul id="chat">
-          <li className="you">
-            <div className="entete">
-              <span className="status green"></span>
-              <h2>Vincent</h2>
-              <h3>10:12AM, Today</h3>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor.
-            </div>
-          </li>
-          <li className="me">
-            <div className="entete">
-              <h3>10:12AM, Today</h3>
-              <h2>Vincent</h2>
-              <span className="status blue"></span>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor.
-            </div>
-          </li>
-          <li className="me">
-            <div className="entete">
-              <h3>10:12AM, Today</h3>
-              <h2>Vincent</h2>
-              <span className="status blue"></span>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">OK</div>
-          </li>
-          <li className="you">
-            <div className="entete">
-              <span className="status green"></span>
-              <h2>Vincent</h2>
-              <h3>10:12AM, Today</h3>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor.
-            </div>
-          </li>
-          <li className="me">
-            <div className="entete">
-              <h3>10:12AM, Today</h3>
-              <h2>Vincent</h2>
-              <span className="status blue"></span>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor.
-            </div>
-          </li>
-          <li className="me">
-            <div className="entete">
-              <h3>10:12AM, Today</h3>
-              <h2>Vincent</h2>
-              <span className="status blue"></span>
-            </div>
-            <div className="triangle"></div>
-            <div className="message">OK</div>
-          </li>
+          {messages.map((message, index) => {
+            const ifYouSender = message.sender === user._id;
+            return (
+              <li key={index} className={ifYouSender ? "you" : "me"}>
+                <div className="entete">
+                  <span className="status green"></span>
+                  <img
+                    src={ifYouSender ? user.profilePicUrl : profilePicUrl}
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <h2>{ifYouSender ? user.name : name}</h2>
+                  <h3>10:12AM, Today</h3>
+                </div>
+                <div className="triangle"></div>
+                <div
+                  className="message msg-box"
+                  onClick={() => setShowIcon(!showIcon)}
+                >
+                  {message.msg}
+                  <div
+                    onClick={() => {
+                      if (window.confirm("Delele your msg?"))
+                        console.log("deleted");
+                    }}
+                    className={
+                      ifYouSender && showIcon ? "msg-del" : "msg-del-none"
+                    }
+                  >
+                    <i className={"fa fa-trash"} style={{ color: "red" }}></i>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
         <footer>
-          <textarea placeholder="Type your message"></textarea>
-          <img
-            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png"
-            alt=""
-          />
-          <img
-            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png"
-            alt=""
-          />
-          <a href="#">Send</a>
+          <MessageInputField sendMsg={sendMsg} />
         </footer>
       </main>
     </div>

@@ -23,7 +23,9 @@ const Messages = ({ chatsData, errorLoading, user }) => {
 
   const socket = useRef();
 
+  //CONNECTION USE effect
   useEffect(() => {
+    console.log("1st useeffect ran ");
     if (!socket.current) {
       socket.current = io(baseUrl);
     }
@@ -51,7 +53,9 @@ const Messages = ({ chatsData, errorLoading, user }) => {
     };
   }, []);
 
+  //load messages useeffect
   useEffect(() => {
+    console.log("2nd useeffect ran ");
     const loadMessages = () => {
       socket.current.emit("loadMessages", {
         userId: user._id,
@@ -74,6 +78,37 @@ const Messages = ({ chatsData, errorLoading, user }) => {
     }
   }, [router.query.message]);
 
+  const sendMsg = (msg) => {
+    if (socket.current) {
+      console.log("send-msg", msg);
+      socket.current.emit("sendNewMsg", {
+        userId: user._id,
+        msgSendToUserId: openChatId.current,
+        msg,
+      });
+    }
+  };
+
+  //CONFIRMING THE MSG is sent and receiving the messages
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("msgSent", ({ newMsg }) => {
+        if (newMsg.receiver === openChatId.current) {
+          setMessages((prev) => [...prev, newMsg]);
+
+          setChats((prev) => {
+            const previousChat = prev.find(
+              (chat) => chat.messagesWith === newMsg.receiver
+            );
+            previousChat.lastMessage = newMsg.msg;
+            previousChat.date = newMsg.date;
+            return [...prev];
+          });
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
       {chats.length > 0 ? (
@@ -91,6 +126,8 @@ const Messages = ({ chatsData, errorLoading, user }) => {
               setChats={setChats}
               connectedUsers={connectedUsers}
               bannerData={bannerData}
+              messages={messages}
+              sendMsg={sendMsg}
             />
           </Col>
         </Row>
