@@ -14,14 +14,17 @@ const Chatbox = ({
 }) => {
   const [showIcon, setShowIcon] = useState(false);
   const { name, profilePicUrl } = bannerData;
-  console.log("messages::", messages);
 
   return (
     <div id="container">
       <aside>
         <ChatlistSearch chats={chats} setChats={setChats} />
         {chats.length > 0 && (
-          <ChatUsers chats={chats} connectedUsers={connectedUsers} />
+          <ChatUsers
+            chats={chats}
+            connectedUsers={connectedUsers}
+            bannerData={bannerData}
+          />
         )}
       </aside>
       <main>

@@ -6,6 +6,7 @@ import Chatbox from "../components/chatbox/chatbox";
 import baseUrl from "../utils/baseUrl";
 import { Row, Col } from "react-bootstrap";
 import { useRouter } from "next/router";
+import getUserInfo from "../utils/getUserInfo";
 
 const Messages = ({ chatsData, errorLoading, user }) => {
   const [chats, setChats] = useState(chatsData);
@@ -71,9 +72,16 @@ const Messages = ({ chatsData, errorLoading, user }) => {
         });
         openChatId.current = chat.messagesWith._id;
       });
+
+      socket.current.on("noChatFound", async () => {
+        const { name, profilePicUrl } = await getUserInfo(router.query.message);
+        setBannerData({ name, profilePicUrl });
+        setMessages([]);
+        openChatId.current = router.query.message;
+      });
     };
 
-    if (socket.current) {
+    if (socket.current && router.query.message) {
       loadMessages();
     }
   }, [router.query.message]);

@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
     if (!error) {
       socket.emit("messagesLoaded", { chat });
     } else {
-      console.log("error");
+      socket.emit("noChatFound");
     }
   });
 
