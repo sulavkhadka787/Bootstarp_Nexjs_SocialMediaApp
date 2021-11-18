@@ -45,27 +45,29 @@ const ChatlistSearch = ({ chats, setChats }) => {
     setLoading(false);
   };
 
-  const addChat = (r) => {
-    console.log("add-chat", r);
+  const addChat = (result) => {
     const alreadyInChat =
       chats.length > 0 &&
-      chats.filter((chat) => chat.messagesWith === r._id).length > 0;
+      chats.filter((chat) => chat.messagesWith === result._id).length > 0;
+
     if (alreadyInChat) {
-      return router.push(`/messages?message=${r._id}`);
-    } else {
+      return router.push(`/messages?message=${result._id}`);
+    }
+    //
+    else {
       const newChat = {
-        messagesWith: r._id,
-        name: r._name,
-        profilePicUrl: r.profilePicUrl,
+        messagesWith: result._id,
+        name: result.name,
+        profilePicUrl: result.profilePicUrl,
         lastMessage: "",
         date: Date.now(),
       };
 
       setChats((prev) => [newChat, ...prev]);
-      return router.push(`/messages?message=${r._id}`);
+
+      return router.push(`/messages?message=${result._id}`);
     }
   };
-
   return (
     <>
       <header>

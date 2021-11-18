@@ -5,6 +5,7 @@ import Link from "next/Link";
 const Sidemenu = ({
   user: { unreadNotification, email, unreadMessage, username },
 }) => {
+  console.log("unreadmsg", unreadMessage);
   return (
     <>
       <Nav className="flex-column fs-4 mt-3 sticky-top">
@@ -13,7 +14,13 @@ const Sidemenu = ({
           <Link href="/">Home</Link>
         </Nav.Item>
         <Nav.Item className="mb-4 nav-links">
-          <i className="fa fa-envelope"></i>
+          <i
+            className={
+              unreadMessage
+                ? "fa fa-envelope text-danger"
+                : "fa fa-envelope text-dark"
+            }
+          ></i>
           <Link
             href="/messages"
             className={

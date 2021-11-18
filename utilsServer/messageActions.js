@@ -1,4 +1,5 @@
 const ChatModel = require("../models/ChatModel");
+const UserModel = require("../models/UserModel");
 
 const loadMessages = async (userId, messagesWith) => {
   console.log("message-actions-loadmessages");
@@ -74,4 +75,18 @@ const sendMsg = async (userId, msgSendToUserId, msg) => {
   }
 };
 
-module.exports = { loadMessages, sendMsg };
+const setMsgToUnread = async (userId) => {
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user.unreadMessage) {
+      user.unreadMessage = true;
+      await user.save();
+    }
+    return;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = { loadMessages, sendMsg, setMsgToUnread };
