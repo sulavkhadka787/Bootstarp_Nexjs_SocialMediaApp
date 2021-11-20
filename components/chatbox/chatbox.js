@@ -11,6 +11,9 @@ const Chatbox = ({
   bannerData,
   messages,
   sendMsg,
+  divRef,
+  deleteMsg,
+  deleteChat,
 }) => {
   const [showIcon, setShowIcon] = useState(false);
   const { name, profilePicUrl } = bannerData;
@@ -24,6 +27,7 @@ const Chatbox = ({
             chats={chats}
             connectedUsers={connectedUsers}
             bannerData={bannerData}
+            deleteChat={deleteChat}
           />
         )}
       </aside>
@@ -43,7 +47,11 @@ const Chatbox = ({
           {messages.map((message, index) => {
             const ifYouSender = message.sender === user._id;
             return (
-              <li key={index} className={ifYouSender ? "you" : "me"}>
+              <li
+                key={index}
+                className={ifYouSender ? "you" : "me"}
+                ref={divRef}
+              >
                 <div className="entete">
                   <span className="status green"></span>
                   <img
@@ -66,7 +74,7 @@ const Chatbox = ({
                   <div
                     onClick={() => {
                       if (window.confirm("Delele your msg?"))
-                        console.log("deleted");
+                        deleteMsg(message._id);
                     }}
                     className={
                       ifYouSender && showIcon ? "msg-del" : "msg-del-none"

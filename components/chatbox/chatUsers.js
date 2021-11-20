@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import calculateTime from "../../utils/calculateTime";
 
-const ChatUsers = ({ chats, connectedUsers, bannerData }) => {
+const ChatUsers = ({ chats, connectedUsers, bannerData, deleteChat }) => {
   const router = useRouter();
 
   return (
@@ -30,11 +30,20 @@ const ChatUsers = ({ chats, connectedUsers, bannerData }) => {
                   <span
                     className={isOnline ? "status green" : "status orange"}
                   ></span>
+
                   {c.lastMessage.length > 20
                     ? `${c.lastMessage.substring(0, 20)}...`
                     : c.lastMessage}
                   <br />
                   <p>{calculateTime(c.date)}</p>
+
+                  <i
+                    className={"fa fa-trash"}
+                    style={{ color: "red", cursor: "pointer" }}
+                    onClick={() => deleteChat(c.messagesWith)}
+                  ></i>
+
+                  <hr />
                 </h3>
               </div>
             </li>

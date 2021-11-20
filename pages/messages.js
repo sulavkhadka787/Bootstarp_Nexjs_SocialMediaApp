@@ -7,6 +7,8 @@ import baseUrl from "../utils/baseUrl";
 import { Row, Col } from "react-bootstrap";
 import { useRouter } from "next/router";
 import getUserInfo from "../utils/getUserInfo";
+import newMsgSound from "../utils/newMsgSound";
+import cookie from "js-cookie";
 
 const Messages = ({ chatsData, errorLoading, user }) => {
   const [chats, setChats] = useState(chatsData);
@@ -23,6 +25,12 @@ const Messages = ({ chatsData, errorLoading, user }) => {
   const router = useRouter();
 
   const socket = useRef();
+
+  const scrollDivToBottom = (divRef) => {
+    divRef.current !== null &&
+      divRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+  const divRef = useRef();
 
   //CONNECTION USE effect
   useEffect(() => {
@@ -71,6 +79,7 @@ const Messages = ({ chatsData, errorLoading, user }) => {
           profilePicUrl: chat.messagesWith.profilePicUrl,
         });
         openChatId.current = chat.messagesWith._id;
+        divRef.current && scrollDivToBottom(divRef);
       });
 
       socket.current.on("noChatFound", async () => {
@@ -116,6 +125,7 @@ const Messages = ({ chatsData, errorLoading, user }) => {
       });
 
       socket.current.on("newMsgReceived", async ({ newMsg }) => {
+        let senderName;
         //WHEN CHAT IS OPENED INSIDE YOUR BROWSER
         if (newMsg.sender === openChatId.current) {
           setMessages((prev) => [...prev, newMsg]);
@@ -125,6 +135,7 @@ const Messages = ({ chatsData, errorLoading, user }) => {
             );
             previousChat.lastMessage = newMsg.msg;
             previousChat.date = newMsg.date;
+            senderName = previousChat.name;
             return [...prev];
           });
         } else {
@@ -139,10 +150,12 @@ const Messages = ({ chatsData, errorLoading, user }) => {
               );
               previousChat.lastMessage = newMsg.msg;
               previousChat.date = newMsg.date;
+              senderName = previousChat.name;
               return [...prev];
             });
           } else {
             const { name, profilePicUrl } = await getUserInfo(newMsg.sender);
+            senderName = name;
             const newChat = {
               messagesWith: newMsg.sender,
               name,
@@ -153,9 +166,44 @@ const Messages = ({ chatsData, errorLoading, user }) => {
             setChats((prev) => [newChat, ...prev]);
           }
         }
+        newMsgSound(senderName);
       });
     }
   }, []);
+
+  useEffect(() => {
+    messages.length > 0 && scrollDivToBottom(divRef);
+  }, [messages]);
+
+  const deleteMsg = (messageId) => {
+    if (socket.current) {
+      socket.current.emit("deleteMsg", {
+        userId: user._id,
+        messagesWith: openChatId.current,
+        messageId,
+      });
+
+      socket.current.on("msgDeleted", () => {
+        setMessages((prev) =>
+          prev.filter((message) => message._id !== messageId)
+        );
+      });
+    }
+  };
+
+  const deleteChat = async (messagesWith) => {
+    try {
+      await axios.delete(`${baseUrl}/api/chats/${messagesWith}`, {
+        headers: { Authorization: cookie.get("token") },
+      });
+      setChats((prev) =>
+        prev.filter((chat) => chat.messagesWith !== messagesWith)
+      );
+      router.push("/message", undefined, { shallow: true });
+    } catch (error) {
+      alert("Error Deleting chat");
+    }
+  };
 
   return (
     <>
@@ -176,6 +224,9 @@ const Messages = ({ chatsData, errorLoading, user }) => {
               bannerData={bannerData}
               messages={messages}
               sendMsg={sendMsg}
+              divRef={divRef}
+              deleteMsg={deleteMsg}
+              deleteChat={deleteChat}
             />
           </Col>
         </Row>
