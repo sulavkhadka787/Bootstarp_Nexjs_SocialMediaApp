@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CreatePost from "../components/Layout/CreatePost";
 import CardPost from "../components/Layout/CardPost";
 import baseUrl from "../utils/baseUrl";
@@ -7,6 +7,8 @@ import axios from "axios";
 import { PostDeleteToastr } from "../components/Layout/Toastr";
 import InfiniteScroll from "react-infinite-scroll-component";
 import cookie from "js-cookie";
+import io from "socket.io-client";
+import NotificationPortal from "../components/home/notificationPortal";
 
 const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   const [posts, setPosts] = useState(postsData || []);
@@ -14,7 +16,20 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   const [hasMore, setHasMore] = useState(true);
   const [pageNumber, setPageNumber] = useState(2);
 
+  const [newNotification, setNewNotification] = useState(null);
+  const [notificationPopup, showNotificationPopup] = useState(false);
+
+  const socket = useRef();
+
   useEffect(() => {
+    if (!socket.current) {
+      socket.current = io(baseUrl);
+    }
+
+    if (socket.current) {
+      socket.current.emit("join", { userId: user._id });
+    }
+
     document.title = `Welcome, ${user.name}`;
   }, [user]);
 
@@ -38,6 +53,13 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
 
   return (
     <>
+      {notificationPopup && newNotification !== null && (
+        <NotificationPortal
+          newNotification={newNotification}
+          notificationPopup={notificationPopup}
+          showNotificationPopup={showNotificationPopup}
+        />
+      )}
       {showToastr && <PostDeleteToastr />}
       <CreatePost user={user} setPosts={setPosts} />
       {posts.length === 0 ? (
@@ -52,6 +74,7 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
         >
           {posts.map((post, index) => (
             <CardPost
+              socket={socket}
               key={index}
               post={post}
               setPosts={setPosts}

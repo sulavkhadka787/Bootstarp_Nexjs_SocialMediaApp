@@ -10,7 +10,7 @@ import LikeList from "../Posts/LikeList";
 import ImageModal from "../Posts/ImageModal";
 import NoImageModal from "../Posts/NoImageModal";
 
-const CardPost = ({ user, post, setPosts, setShowToastr }) => {
+const CardPost = ({ user, post, setPosts, setShowToastr, socket }) => {
   const [modalShow, setModalShow] = useState(false);
 
   const [likes, setLikes] = useState(post.likes);

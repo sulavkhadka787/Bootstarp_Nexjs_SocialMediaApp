@@ -24,6 +24,7 @@ const Chatbox = ({
         <ChatlistSearch chats={chats} setChats={setChats} />
         {chats.length > 0 && (
           <ChatUsers
+            user={user}
             chats={chats}
             connectedUsers={connectedUsers}
             bannerData={bannerData}

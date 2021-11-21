@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import calculateTime from "../../utils/calculateTime";
 
-const ChatUsers = ({ chats, connectedUsers, bannerData, deleteChat }) => {
+const ChatUsers = ({ chats, connectedUsers, bannerData, deleteChat, user }) => {
   const router = useRouter();
 
   return (
