@@ -213,9 +213,8 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
     const { userId } = req;
 
     const post = await PostModel.findById(postId);
-
     if (!post) {
-      return res.status(404).send("No Post Found");
+      return res.status(404).send("No Post found");
     }
 
     const isLiked =
@@ -230,16 +229,17 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
       .indexOf(userId);
 
     await post.likes.splice(index, 1);
+
     await post.save();
 
     if (post.user.toString() !== userId) {
       await removeLikeNotification(userId, postId, post.user.toString());
     }
 
-    return res.status(200).send("Post unLiked");
+    return res.status(200).send("Post Unliked");
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(500).send(`Server error`);
   }
 });
 

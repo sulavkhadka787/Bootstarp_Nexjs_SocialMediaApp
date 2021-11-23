@@ -9,6 +9,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import cookie from "js-cookie";
 import io from "socket.io-client";
 import NotificationPortal from "../components/home/notificationPortal";
+import MessageNotificationModal from "../components/home/messageNotificationModal";
+import newMsgSound from "../utils/newMsgSound";
+import getUserInfo from "../utils/getUserInfo";
 
 const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   const [posts, setPosts] = useState(postsData || []);
@@ -19,6 +22,9 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
   const [newNotification, setNewNotification] = useState(null);
   const [notificationPopup, showNotificationPopup] = useState(false);
 
+  const [newMessageReceived, setNewMessageReceived] = useState(null);
+  const [newMessageModal, showNewMessageModal] = useState(false);
+
   const socket = useRef();
 
   useEffect(() => {
@@ -28,6 +34,20 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
 
     if (socket.current) {
       socket.current.emit("join", { userId: user._id });
+
+      socket.current.on("newMsgReceived", async ({ newMsg }) => {
+        const { name, profilePicUrl } = await getUserInfo(newMsg.sender);
+
+        if (user.newMessagePopup) {
+          setNewMessageReceived({
+            ...newMsg,
+            senderName: name,
+            senderProfilePic: profilePicUrl,
+          });
+          showNewMessageModal(true);
+        }
+        newMsgSound(name);
+      });
     }
 
     document.title = `Welcome, ${user.name}`;
@@ -51,6 +71,18 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
     }
   };
 
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on(
+        "newNotificationReceived",
+        ({ name, profilePicUrl, username, postId }) => {
+          setNewNotification({ name, profilePicUrl, username, postId });
+          showNotificationPopup(true);
+        }
+      );
+    }
+  }, []);
+
   return (
     <>
       {notificationPopup && newNotification !== null && (
@@ -61,6 +93,15 @@ const Index = ({ user, userFollowStats, postsData, errorLoading }) => {
         />
       )}
       {showToastr && <PostDeleteToastr />}
+      {newMessageModal && newMessageReceived !== null && (
+        <MessageNotificationModal
+          socket={socket}
+          showNewMessageModal={showNewMessageModal}
+          newMessageModal={newMessageModal}
+          newMessageReceived={newMessageReceived}
+          user={user}
+        />
+      )}
       <CreatePost user={user} setPosts={setPosts} />
       {posts.length === 0 ? (
         <div>No Posts</div>

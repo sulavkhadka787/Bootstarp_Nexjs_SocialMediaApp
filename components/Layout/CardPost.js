@@ -75,18 +75,41 @@ const CardPost = ({ user, post, setPosts, setShowToastr, socket }) => {
         <hr />
         <Row>
           <div className="d-inline">
-            {isLiked ? (
-              <i
-                className="fa fa-heart"
-                style={{ color: "red" }}
-                onClick={() => likePost(post._id, user._id, setLikes, false)}
-              ></i>
-            ) : (
-              <i
-                className="fa fa-heart-o"
-                onClick={() => likePost(post._id, user._id, setLikes, true)}
-              ></i>
-            )}
+            <i
+              className={isLiked ? "fa fa-heart" : "fa fa-heart-o"}
+              style={{ color: "red", cursor: "pointer" }}
+              onClick={() => {
+                console.log("onclick cliced");
+                if (socket.current) {
+                  console.log("socket current likePost");
+                  socket.current.emit("likePost", {
+                    postId: post._id,
+                    userId: user._id,
+                    like: isLiked ? false : true,
+                  });
+
+                  socket.current.on("postLiked", () => {
+                    console.log("socket current postLiked");
+                    if (isLiked) {
+                      setLikes((prev) =>
+                        prev.filter((like) => like.user !== user._id)
+                      );
+                    }
+                    //
+                    else {
+                      setLikes((prev) => [...prev, { user: user._id }]);
+                    }
+                  });
+                } else {
+                  likePost(
+                    post._id,
+                    user._id,
+                    setLikes,
+                    isLiked ? false : true
+                  );
+                }
+              }}
+            ></i>
             {"   "}
             {likes.length > 0 && <LikeList postId={post._id} />}
             {"  "}

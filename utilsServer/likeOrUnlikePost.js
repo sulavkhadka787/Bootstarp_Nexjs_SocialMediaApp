@@ -4,7 +4,7 @@ const PostModel = require("../models/PostModel");
 const {
   newLikeNotification,
   removeLikeNotification,
-} = require("../utilsServer/notificationActions");
+} = require("../utils/notificationActions");
 
 const likeOrUnlikePost = async (postId, userId, like) => {
   try {
@@ -15,19 +15,23 @@ const likeOrUnlikePost = async (postId, userId, like) => {
     if (like) {
       const isLiked =
         post.likes.filter((like) => like.user.toString() === userId).length > 0;
+
+      if (isLiked) return { error: "Post liked before" };
+
+      await post.likes.unshift({ user: userId });
+
+      await post.save();
+
+      if (post.user.toString() !== userId) {
+        await newLikeNotification(userId, postId, post.user.toString());
+      }
     }
-
-    if (isLiked) return { error: "Post liked before" };
-
-    await post.likes.unshift({ user: userId });
-    await post.save();
-
-    if (post.user.toString() !== userId) {
-      await newLikeNotification(userId, postId, post.user.toString());
-    } else {
+    //
+    else {
       const isLiked =
         post.likes.filter((like) => like.user.toString() === userId).length ===
         0;
+
       if (isLiked) return { error: "Post not liked before" };
 
       const indexOf = post.likes
@@ -35,6 +39,7 @@ const likeOrUnlikePost = async (postId, userId, like) => {
         .indexOf(userId);
 
       await post.likes.splice(indexOf, 1);
+
       await post.save();
 
       if (post.user.toString() !== userId) {
@@ -43,6 +48,7 @@ const likeOrUnlikePost = async (postId, userId, like) => {
     }
 
     const user = await UserModel.findById(userId);
+
     const { name, profilePicUrl, username } = user;
 
     return {
@@ -53,8 +59,7 @@ const likeOrUnlikePost = async (postId, userId, like) => {
       postByUserId: post.user.toString(),
     };
   } catch (error) {
-    return { error: "server error ##++!!" };
+    return { error: "Server error" };
   }
 };
-
 module.exports = { likeOrUnlikePost };

@@ -58,7 +58,7 @@ export const likePost = async (postId, userId, setLikes, like = true) => {
     } else if (!like) {
       //await Axios.put(`/unlike/${postId}`);
       await axios.put(
-        `${baseUrl}/api/posts/like/${postId}`,
+        `${baseUrl}/api/posts/unlike/${postId}`,
         {},
         {
           headers: { Authorization: cookie.get("token") },

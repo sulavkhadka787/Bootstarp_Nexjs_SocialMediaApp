@@ -22,8 +22,10 @@ const {
   setMsgToUnread,
   deleteMsg,
 } = require("./utilsServer/messageActions");
+const { likeOrUnlikePost } = require("./utilsServer/likeOrUnlikePost");
 
 io.on("connection", (socket) => {
+  console.log("user-conneted==>", socket.id);
   socket.on("join", async ({ userId }) => {
     const users = await addUser(userId, socket.id);
 
@@ -32,6 +34,31 @@ io.on("connection", (socket) => {
         users: users.filter((user) => user.userId !== userId),
       });
     }, 10000);
+  });
+
+  socket.on("likePost", async ({ postId, userId, like }) => {
+    const { success, name, profilePicUrl, username, postByUserId, error } =
+      await likeOrUnlikePost(postId, userId, like);
+
+    if (success) {
+      socket.emit("postLiked");
+
+      if (postByUserId !== userId) {
+        const receiverSocket = findConnectedUser(postByUserId);
+
+        if (receiverSocket && like) {
+          // WHEN YOU WANT TO SEND DATA TO ONE PARTICULAR CLIENT
+          io.to(receiverSocket.socketId).emit("newNotificationReceived", {
+            name,
+            profilePicUrl,
+            username,
+            postId,
+          });
+        }
+      }
+    } else {
+      console.log("not succesful");
+    }
   });
 
   socket.on("loadMessages", async ({ userId, messagesWith }) => {
@@ -67,6 +94,23 @@ io.on("connection", (socket) => {
       socket.emit("msgDeleted");
     }
   });
+
+  socket.on(
+    "sendMsgFromNotification",
+    async ({ userId, msgSendToUserId, msg }) => {
+      const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg);
+      const receiverSocket = findConnectedUser(msgSendToUserId);
+
+      if (receiverSocket) {
+        //when you want to send a msg to a particular socket
+        io.to(receiverSocket.socketId).emit("newMsgReceived", { newMsg });
+      } else {
+        await setMsgToUnread(msgSendToUserId);
+      }
+
+      !error && socket.emit("msgSentFromNotification");
+    }
+  );
 
   socket.on("disconnect", () => {
     removeUser(socket.id);
