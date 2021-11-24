@@ -101,6 +101,12 @@ const Login = () => {
               Sign-up here
             </Link>
           </div>
+          <div className="alert alert-success mb-3 mt-3">
+            <strong>Forgot Password ? </strong>
+            <Link className="none-a" href="/reset">
+              Reset Password
+            </Link>
+          </div>
         </Col>
       </Row>
     </>
