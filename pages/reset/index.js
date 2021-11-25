@@ -10,14 +10,30 @@ function ResetPage() {
   const [emailChecked, setEmailChecked] = useState(false);
 
   const [loading, setLoading] = useState(false);
+
+  const resetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await axios.post(`${baseUrl}/api/reset`, { email });
+      setEmailChecked(true);
+    } catch (error) {
+      setErrorMsg(catchErrors(error));
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    errorMsg !== null && setTimeout(() => setErrorMsg(null), 5000);
+  }, [errorMsg]);
   return (
     <>
       <Row md={2} className="justify-content-md-center">
         <Col>
-          <div>
-            <strong>Reset Password</strong>
-          </div>
           <div className="alert alert-success mb-3 mt-3">
+            <div>
+              <strong>Reset Password</strong>
+            </div>
             {errorMsg && (
               <strong style={{ color: "red" }}>
                 Error!! <br />
@@ -32,20 +48,26 @@ function ResetPage() {
             )}
           </div>
 
-          <Form>
+          <Form onSubmit={resetPassword}>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 required
                 type="email"
-                placeholder="Enter Email"
+                placeholder="Enter Email address"
                 name="email"
                 value={email}
-                onChange={handleChange}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="mb-3">
+            <Button
+              variant="primary"
+              type="submit"
+              className="mb-3"
+              disabled={loading || email.length === 0}
+            >
               Submit
             </Button>
           </Form>
