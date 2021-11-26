@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { Form, Row, Col, Image, Button } from "react-bootstrap";
 import uploadPic from "../../utils/uploadPicToCloudinary";
 import { submitNewPost } from "../../utils/postActions";
+import CropImageModal from "./cropimagemodal";
+import { useRouter } from "next/router";
 
 const CreatePost = ({ user, setPosts }) => {
   const [newPost, setNewPost] = useState({ text: "", location: "" });
@@ -13,6 +15,9 @@ const CreatePost = ({ user, setPosts }) => {
 
   const [media, setMedia] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -62,6 +67,14 @@ const CreatePost = ({ user, setPosts }) => {
   };
   return (
     <>
+      {showModal && (
+        <CropImageModal
+          mediaPreview={mediaPreview}
+          setMedia={setMedia}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
       <Row>
         <Col>
           {error && (
@@ -149,6 +162,16 @@ const CreatePost = ({ user, setPosts }) => {
             />
           )}
         </div>
+        {mediaPreview !== null && (
+          <Button
+            onClick={() => setShowModal(true)}
+            variant="danger"
+            className="mt-4"
+            style={{ width: "120px", display: "block" }}
+          >
+            Crop-Image
+          </Button>
+        )}
         <Button
           type="submit"
           variant="primary"

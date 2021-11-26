@@ -6,6 +6,7 @@ import Layout from "../components/Layout/Layout";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-toastify/dist/ReactToastify.css";
 import "../components/chatbox/chatbox.css";
+import "cropperjs/dist/cropper.css";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
